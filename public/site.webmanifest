@@ -1,0 +1,17 @@
+{
+  "name": "Rao Rizwan | Backend Engineer",
+  "short_name": "Rao Rizwan",
+  "description": "Portfolio of Rao Rizwan, a backend engineer focused on Python, Django, REST APIs, and cloud infrastructure.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
