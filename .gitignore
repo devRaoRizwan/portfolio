@@ -1,0 +1,14 @@
+node_modules
+dist
+.vercel
+.DS_Store
+*.local
+.env
+.env.*
+!.env.example
+.vscode
+
+# Private source material and local-only files
+private/
+
+# Source images kept locally; the processed versions in public/ are committed
