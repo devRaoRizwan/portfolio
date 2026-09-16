@@ -10,7 +10,7 @@ export default function Work() {
           <Reveal key={job.company} delay={i * 80}>
             <article className="glass glass-hover rounded-[24px] p-6 sm:p-8">
               <div className="flex items-start gap-4">
-                <Logo src={job.logo} name={job.company} size={48} />
+                <Logo src={job.logo} name={job.company} className="h-10 w-10 sm:h-12 sm:w-12" />
 
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">

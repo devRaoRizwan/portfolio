@@ -34,9 +34,10 @@ export function Reveal({ children, delay = 0, as: Tag = 'div', className = '' })
   )
 }
 
-export function Section({ id, title, children, className = '' }) {
+export function Section({ id, title, children, className = '', flush = false }) {
+  const pad = flush ? 'pb-6 sm:pb-8 lg:pb-10' : 'py-6 sm:py-8 lg:py-10'
   return (
-    <section id={id} className={`w-full py-6 sm:py-8 lg:py-10 ${className}`}>
+    <section id={id} className={`w-full ${pad} ${className}`}>
       {title && (
         <Reveal className="mb-5">
           <h2 className="text-[1.75rem] sm:text-3xl">{title}</h2>
@@ -48,6 +49,7 @@ export function Section({ id, title, children, className = '' }) {
 }
 
 export function Logo({ src, name, size = 44, className = '' }) {
+  const sizedByClass = /(^|\s)(h-|w-|size-)/.test(className)
   const monogram = name
     .split(' ')
     .filter(Boolean)
@@ -59,7 +61,7 @@ export function Logo({ src, name, size = 44, className = '' }) {
   return (
     <span
       className={`glass-chip flex shrink-0 items-center justify-center overflow-hidden rounded-xl ${className}`}
-      style={{ width: size, height: size }}
+      style={sizedByClass ? undefined : { width: size, height: size }}
     >
       {src ? (
         <img
@@ -137,10 +139,10 @@ export const IconArrow = (p) => (
 
 export function LogoGrid({ items }) {
   return (
-    <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
+    <ul className="grid grid-cols-4 gap-1.5 sm:grid-cols-5 sm:gap-2 lg:grid-cols-6">
       {items.map((item) => (
         <li key={item.name}>
-          <div className="glass glass-hover flex h-full flex-col items-center gap-2.5 rounded-2xl px-2 py-5">
+          <div className="glass glass-hover flex h-full flex-col items-center gap-2 rounded-xl px-1.5 py-3 sm:gap-2.5 sm:rounded-2xl sm:px-2 sm:py-5">
             {item.icon ? (
               <img
                 src={item.icon}
@@ -149,14 +151,14 @@ export function LogoGrid({ items }) {
                 height={28}
                 loading="lazy"
                 decoding="async"
-                className="h-7 w-7"
+                className="h-5 w-5 sm:h-7 sm:w-7"
               />
             ) : (
-              <span className="flex h-7 items-center font-mono text-base font-semibold text-ink">
+              <span className="flex h-5 items-center font-mono text-sm font-semibold text-ink sm:h-7 sm:text-base">
                 {item.name.slice(0, 2)}
               </span>
             )}
-            <span className="text-center text-[11px] leading-tight text-muted">
+            <span className="text-center text-[10px] leading-tight text-muted sm:text-[11px]">
               {item.name}
             </span>
           </div>
@@ -164,4 +166,72 @@ export function LogoGrid({ items }) {
       ))}
     </ul>
   )
+}
+
+export const IconLayers = (p) => (
+  <svg {...base} {...p}>
+    <polygon points="12 2 2 7 12 12 22 7 12 2" />
+    <polyline points="2 17 12 22 22 17" />
+    <polyline points="2 12 12 17 22 12" />
+  </svg>
+)
+
+export const IconBriefcase = (p) => (
+  <svg {...base} {...p}>
+    <rect x="2" y="7" width="20" height="14" rx="2" />
+    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+  </svg>
+)
+
+export const IconWrench = (p) => (
+  <svg {...base} {...p}>
+    <path d="M14.7 6.3a4 4 0 0 0 5 5l-9.4 9.4a2.1 2.1 0 0 1-3-3z" />
+    <path d="M14.7 6.3 18 3l3 3-3.3 3.3" />
+  </svg>
+)
+
+export const IconSparkle = (p) => (
+  <svg {...base} {...p}>
+    <path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z" />
+  </svg>
+)
+
+export const IconUser = (p) => (
+  <svg {...base} {...p}>
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+)
+
+export const IconCheck = (p) => (
+  <svg {...base} {...p}>
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+)
+
+
+export const gmailWebUrl = (email) =>
+  `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`
+
+export function openGmail(event, email) {
+  if (event) event.preventDefault()
+  const web = gmailWebUrl(email)
+  const mobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || '')
+
+  if (!mobile) {
+    window.open(web, '_blank', 'noopener,noreferrer')
+    return
+  }
+
+  const fallback = setTimeout(() => {
+    if (!document.hidden) window.location.href = web
+  }, 1200)
+
+  const cancel = () => {
+    if (document.hidden) clearTimeout(fallback)
+  }
+  document.addEventListener('visibilitychange', cancel, { once: true })
+  window.addEventListener('pagehide', () => clearTimeout(fallback), { once: true })
+
+  window.location.href = `googlegmail://co?to=${encodeURIComponent(email)}`
 }

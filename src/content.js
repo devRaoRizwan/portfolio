@@ -3,9 +3,10 @@ export const profile = {
   role: 'Backend Engineer',
   coreStack: ['Python', 'Django', 'DRF', 'PostgreSQL', 'Celery', 'AWS'],
 
-  bio: `I work on the half of a product nobody sees: Django REST APIs at a
-    hundred thousand requests a day, Celery workers taking the slow things off
-    the request path, and a pipeline that will not ship a known vulnerability.`,
+  bio: `Two years on the half of a product nobody sees. Django REST APIs at a
+    hundred thousand requests a day, Celery and RabbitMQ keeping slow work off
+    the request path, and CI/CD that stops a release when a scan finds
+    something.`,
 
   email: 'dev.raorizwan@gmail.com',
   phone: '+92 323 454 4880',
@@ -124,7 +125,8 @@ export const projects = [
     ],
     links: {
       live: 'https://job-harvester-demo.vercel.app',
-      frontend: 'https://github.com/devRaoRizwan/JobHarvesterDemo',
+      overview: 'https://github.com/devRaoRizwan/JobHarvesterDemo',
+      frontend: null,
       backend: null,
       crawlers: null,
     },
@@ -162,6 +164,7 @@ export const projects = [
     stack: ['Django REST Framework', 'JWT', 'PostgreSQL', 'drf-spectacular'],
     links: {
       live: null,
+      overview: null,
       frontend: null,
       backend: 'https://github.com/devRaoRizwan/jobbr',
       crawlers: null,

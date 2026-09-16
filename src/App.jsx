@@ -1,5 +1,5 @@
 import Rail from './components/Rail'
-import Background from './components/Background'
+import MobileNav from './components/MobileNav'
 import Work from './components/Work'
 import Projects from './components/Projects'
 import Stack from './components/Stack'
@@ -19,7 +19,7 @@ export default function App() {
         <i />
       </div>
 
-      <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-[1500px] px-4 pb-24 sm:px-6 lg:px-8 lg:pb-0">
         <div className="grid gap-3 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-10 xl:grid-cols-[380px_minmax(0,1fr)]">
           <Rail />
 
@@ -28,10 +28,11 @@ export default function App() {
             <Work />
             <Stack />
             <AITools />
-            <Background />
           </main>
         </div>
       </div>
+
+      <MobileNav />
     </>
   )
 }

@@ -39,6 +39,7 @@ function Cover({ cover, name, href }) {
 
 function Links({ name, links }) {
   const repos = [
+    { key: 'overview', label: 'Overview' },
     { key: 'frontend', label: 'Frontend' },
     { key: 'backend', label: 'Backend' },
     { key: 'crawlers', label: 'Crawlers' },
@@ -67,7 +68,7 @@ function Links({ name, links }) {
           className="glass-chip glass-hover inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink"
         >
           <IconGithub width={15} height={15} />
-          {repos.length > 1 ? repo.label : 'Source'}
+          {repos.length > 1 || repo.key === 'overview' ? repo.label : 'Source'}
           <span className="sr-only">code for {name}</span>
         </a>
       ))}
@@ -77,7 +78,7 @@ function Links({ name, links }) {
 
 export default function Projects() {
   return (
-    <Section id="projects" title="Projects">
+    <Section id="projects" title="Projects" flush>
       <div className="space-y-5">
         {projects.map((project, i) => (
           <Reveal key={project.name} delay={i * 80}>
@@ -89,10 +90,10 @@ export default function Projects() {
                   <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
                     <h3 className="text-2xl font-semibold text-ink">{project.name}</h3>
                     {project.links.live && (
-                      <span className="inline-flex items-center gap-2 font-mono text-xs text-ink">
+                      <span className="inline-flex items-center gap-2 font-mono text-xs text-[#047857]">
                         <span aria-hidden className="relative flex h-1.5 w-1.5">
-                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ink opacity-40" />
-                          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-ink" />
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#10b981] opacity-70" />
+                          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#10b981]" />
                         </span>
                         Live
                       </span>

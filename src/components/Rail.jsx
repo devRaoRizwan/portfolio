@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { profile } from '../content'
+import { profile, background } from '../content'
+import EmailButton from './EmailButton'
 import {
-  IconMail,
+  Logo,
   IconGithub,
   IconLinkedin,
   IconDownload,
@@ -12,10 +13,10 @@ const LINKS = [
   { href: '#work', label: 'Experience' },
   { href: '#stack', label: 'Tools' },
   { href: '#ai', label: 'AI tools' },
-  { href: '#education', label: 'Background' },
 ]
 
 export default function Rail() {
+  const { education, community } = background
   const [active, setActive] = useState('')
 
   useEffect(() => {
@@ -57,9 +58,9 @@ export default function Rail() {
           </div>
         </div>
 
-        <p className="mt-4 text-[13.5px] leading-relaxed text-muted">{profile.bio}</p>
+        <p className="mt-3.5 text-[13px] leading-relaxed text-muted">{profile.bio}</p>
 
-        <ul className="mt-4 flex flex-wrap gap-1.5">
+        <ul className="mt-3.5 flex flex-wrap gap-1.5">
           {profile.coreStack.map((tech) => (
             <li
               key={tech}
@@ -70,22 +71,42 @@ export default function Rail() {
           ))}
         </ul>
 
-        <nav aria-label="Sections" className="no-print mt-5 lg:hidden">
-          <ul className="flex flex-wrap gap-1.5">
-            {LINKS.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="glass-chip inline-flex rounded-lg px-2.5 py-1 text-[13px] text-ink-soft"
-                >
-                  {link.label}
-                </a>
+        <div className="mt-4 h-px bg-[var(--color-line)]" />
+
+        <div className="mt-4">
+          <p className="eyebrow mb-2.5">Studied</p>
+          <div className="flex items-center gap-3">
+            <Logo src={education.logo} name={education.institution} className="h-8 w-8 sm:h-9 sm:w-9" />
+            <div className="min-w-0">
+              <p className="text-[13px] font-medium leading-snug text-ink">
+                {education.institution}
+              </p>
+              <p className="mt-0.5 text-[11px] text-muted">
+                {education.degree}, {education.period}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <p className="eyebrow mb-2.5">Outside work</p>
+          <ul className="space-y-3">
+            {community.map((item) => (
+              <li key={item.org} className="flex items-start gap-3">
+                <Logo src={item.logo} name={item.org} className="h-8 w-8 sm:h-9 sm:w-9" />
+                <div className="min-w-0">
+                  <p className="text-[13px] font-medium leading-snug text-ink">{item.org}</p>
+                  <p className="mt-0.5 text-[11px] leading-relaxed text-muted">{item.note}</p>
+                </div>
               </li>
             ))}
           </ul>
-        </nav>
+        </div>
 
-        <nav aria-label="Sections" className="no-print mt-5 hidden lg:block">
+        <div className="mt-4 h-px bg-[var(--color-line)]" />
+
+
+        <nav aria-label="Sections" className="no-print mt-4 hidden lg:block">
           <ul>
             {LINKS.map((link, i) => {
               const on = active === link.href
@@ -93,7 +114,7 @@ export default function Rail() {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className={`group flex items-baseline gap-3 py-[7px] text-sm transition-colors ${
+                    className={`group flex items-baseline gap-3 py-1.5 text-sm transition-colors ${
                       on ? 'font-medium text-ink' : 'text-muted hover:text-ink'
                     }`}
                   >
@@ -113,14 +134,8 @@ export default function Rail() {
           </ul>
         </nav>
 
-        <div className="no-print mt-6 flex flex-wrap items-center gap-2">
-          <a
-            href={`mailto:${profile.email}`}
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-dark"
-          >
-            <IconMail width={15} height={15} />
-            Email
-          </a>
+        <div className="no-print mt-5 flex flex-wrap items-center gap-2">
+          <EmailButton className="flex-1" />
           <a
             href={profile.resume}
             download
@@ -135,18 +150,18 @@ export default function Rail() {
             target="_blank"
             rel="noreferrer noopener"
             aria-label="GitHub"
-            className="glass-chip glass-hover inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-muted hover:text-ink"
+            className="glass-chip glass-hover inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-muted hover:text-ink sm:h-10 sm:w-10"
           >
-            <IconGithub width={17} height={17} />
+            <IconGithub width={16} height={16} />
           </a>
           <a
             href={profile.linkedin}
             target="_blank"
             rel="noreferrer noopener"
             aria-label="LinkedIn"
-            className="glass-chip glass-hover inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-muted hover:text-ink"
+            className="glass-chip glass-hover inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-muted hover:text-ink sm:h-10 sm:w-10"
           >
-            <IconLinkedin width={17} height={17} />
+            <IconLinkedin width={16} height={16} />
           </a>
         </div>
       </div>
