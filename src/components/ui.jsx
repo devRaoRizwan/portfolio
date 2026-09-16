@@ -36,7 +36,7 @@ export function Reveal({ children, delay = 0, as: Tag = 'div', className = '' })
 
 export function Section({ id, title, children, className = '' }) {
   return (
-    <section id={id} className={`w-full py-8 sm:py-10 ${className}`}>
+    <section id={id} className={`w-full py-6 sm:py-8 lg:py-10 ${className}`}>
       {title && (
         <Reveal className="mb-5">
           <h2 className="text-[1.75rem] sm:text-3xl">{title}</h2>

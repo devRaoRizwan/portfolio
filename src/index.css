@@ -3,9 +3,9 @@
 @theme {
   --color-canvas: #ffffff;
   --color-ink: #0a0a0a;
-  --color-ink-soft: #2e2e2e;
-  --color-muted: #6a6a6a;
-  --color-faint: #8c8c8c;
+  --color-ink-soft: #3a3a3a;
+  --color-muted: #565656;
+  --color-faint: #707070;
   --color-line: #e4e4e6;
   --color-accent: #0a0a0a;
   --color-accent-dark: #000000;
@@ -18,6 +18,28 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(10, 10, 10, 0.22) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(10, 10, 10, 0.2);
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(10, 10, 10, 0.36);
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
   }
   body {
     margin: 0;
@@ -39,6 +61,11 @@
   }
   section[id] {
     scroll-margin-top: 24px;
+  }
+  @media (min-width: 1024px) {
+    main > section:first-child {
+      padding-top: 0;
+    }
   }
   :focus-visible {
     outline: 2px solid var(--color-ink);

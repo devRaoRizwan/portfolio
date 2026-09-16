@@ -13,7 +13,7 @@ function Cover({ cover, name, href }) {
       height={900}
       loading="lazy"
       decoding="async"
-      className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+      className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.03]"
     />
   ) : (
     <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-accent-soft via-white to-accent-soft">
@@ -25,7 +25,7 @@ function Cover({ cover, name, href }) {
   )
 
   const shell =
-    'group block aspect-[16/11] overflow-hidden rounded-2xl shadow-[0_2px_4px_rgba(10,10,10,0.05),0_18px_40px_-18px_rgba(10,10,10,0.35)] ring-1 ring-black/[0.07] md:aspect-auto md:h-full md:self-stretch'
+    'group block aspect-[14/9] overflow-hidden rounded-2xl bg-[#0e0e13] shadow-[0_2px_4px_rgba(10,10,10,0.05),0_18px_40px_-18px_rgba(10,10,10,0.35)] ring-1 ring-black/[0.07] xl:self-start'
 
   return href ? (
     <a href={href} target="_blank" rel="noreferrer noopener" className={shell}>
@@ -82,7 +82,7 @@ export default function Projects() {
         {projects.map((project, i) => (
           <Reveal key={project.name} delay={i * 80}>
             <article className="glass glass-hover rounded-[24px] p-6 sm:p-8">
-              <div className="grid items-stretch gap-6 md:grid-cols-[0.85fr_1.15fr] md:gap-8">
+              <div className="grid gap-6 xl:grid-cols-[1fr_1.3fr] xl:gap-8">
                 <Cover cover={project.cover} name={project.name} href={project.links.live} />
 
                 <div className="min-w-0">

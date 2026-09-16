@@ -134,8 +134,8 @@ export const projects = [
     name: 'Jobbr',
     tagline: 'A job board API with two very different users',
     cover: {
-      icon: 'ui:lock',
-      caption: 'JWT + RBAC',
+      image: '/images/jobbr.webp',
+      alt: 'The Jobbr API surface: auth, jobs, applications and bookmark endpoints',
     },
     description: `Employers and job seekers want opposite things from the same
       data, so the API is built around keeping them apart.`,
@@ -159,7 +159,7 @@ export const projects = [
       ],
       note: 'Same data underneath. The token decides which half of the API you can see.',
     },
-    stack: ['Django REST Framework', 'JWT', 'PostgreSQL', 'Swagger/OpenAPI'],
+    stack: ['Django REST Framework', 'JWT', 'PostgreSQL', 'drf-spectacular'],
     links: {
       live: null,
       frontend: null,

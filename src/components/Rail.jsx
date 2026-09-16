@@ -36,8 +36,8 @@ export default function Rail() {
   }, [])
 
   return (
-    <header id="top" className="lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:py-4">
-      <div className="glass flex w-full flex-col rounded-[26px] p-6 lg:min-h-[min(640px,calc(100vh-2rem))] lg:max-h-full lg:overflow-y-auto">
+    <header id="top" className="lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-start lg:py-6">
+      <div className="glass flex w-full flex-col rounded-[26px] p-5 sm:p-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
         <div className="flex items-center gap-4 lg:block">
           <picture>
             <source srcSet={profile.photo} type="image/webp" />
@@ -70,6 +70,21 @@ export default function Rail() {
           ))}
         </ul>
 
+        <nav aria-label="Sections" className="no-print mt-5 lg:hidden">
+          <ul className="flex flex-wrap gap-1.5">
+            {LINKS.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className="glass-chip inline-flex rounded-lg px-2.5 py-1 text-[13px] text-ink-soft"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
         <nav aria-label="Sections" className="no-print mt-5 hidden lg:block">
           <ul>
             {LINKS.map((link, i) => {
@@ -98,7 +113,7 @@ export default function Rail() {
           </ul>
         </nav>
 
-        <div className="no-print mt-6 flex items-center gap-2">
+        <div className="no-print mt-6 flex flex-wrap items-center gap-2">
           <a
             href={`mailto:${profile.email}`}
             className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-dark"
