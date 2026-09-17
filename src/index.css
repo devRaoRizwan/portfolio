@@ -1,3 +1,4 @@
+@import './fonts.css';
 @import 'tailwindcss';
 
 @theme {
@@ -199,6 +200,14 @@
   will-change: transform;
 }
 
+@media (max-width: 1023px) {
+  .mesh i {
+    animation: none !important;
+    will-change: auto;
+    filter: blur(70px);
+  }
+}
+
 .mesh i:nth-child(1) {
   width: 58vw;
   height: 58vw;
@@ -263,7 +272,7 @@
   }
 }
 
-.reveal {
+.js .reveal {
   opacity: 0;
   transform: translateY(20px);
   transition:
@@ -271,7 +280,7 @@
     transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.reveal.is-visible {
+.js .reveal.is-visible {
   opacity: 1;
   transform: none;
 }

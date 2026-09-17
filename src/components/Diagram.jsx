@@ -150,7 +150,7 @@ const UI = {
   ),
 }
 
-export function NodeIcon({ icon, size = 22 }) {
+function NodeIcon({ icon, size = 22 }) {
   if (!icon) return null
 
   if (icon.startsWith('tech:')) {
@@ -281,18 +281,20 @@ export default function Diagram({ diagram }) {
     <figure className="glass-inset mt-6 rounded-2xl p-4 sm:p-5">
       {diagram.caption && <figcaption className="eyebrow mb-4">{diagram.caption}</figcaption>}
 
-      {diagram.kind === 'split' ? (
-        <Split diagram={diagram} />
-      ) : (
-        <div className="space-y-5">
-          {diagram.lanes.map((lane, i) => (
-            <Lane key={lane.label || i} lane={lane} />
-          ))}
-        </div>
-      )}
+      <div className="hidden sm:block">
+        {diagram.kind === 'split' ? (
+          <Split diagram={diagram} />
+        ) : (
+          <div className="space-y-5">
+            {diagram.lanes.map((lane, i) => (
+              <Lane key={lane.label || i} lane={lane} />
+            ))}
+          </div>
+        )}
+      </div>
 
       {diagram.note && (
-        <p className="mt-4 border-l-2 border-accent/40 pl-3 text-[13px] leading-relaxed text-muted">
+        <p className="border-l-2 border-accent/40 pl-3 text-[13px] leading-relaxed text-muted sm:mt-4">
           {diagram.note}
         </p>
       )}

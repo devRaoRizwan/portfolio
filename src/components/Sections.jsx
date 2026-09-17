@@ -2,6 +2,8 @@ import { profile, projects, work, toolbelt, aitools, background } from '../conte
 import EmailButton from './EmailButton'
 import Diagram from './Diagram'
 import {
+  gmailWebUrl,
+  openGmail,
   Reveal,
   Logo,
   Chip,
@@ -13,7 +15,7 @@ import {
   IconArrow,
 } from './ui'
 
-export function Shell({ children, className = '' }) {
+function Shell({ children, className = '' }) {
   return (
     <div className={`mx-auto w-full max-w-[1720px] px-4 sm:px-6 lg:px-8 ${className}`}>
       {children}
@@ -27,7 +29,7 @@ export function Section({ id, title, children }) {
       <Shell>
         <Reveal className="mb-6 sm:mb-7">
           <div className="section-head flex items-baseline gap-4 border-b border-[var(--color-line)] px-2 pb-4 pt-1">
-            <h2 className="text-[1.6rem] leading-none tracking-tight sm:text-[2rem]">
+            <h2 className="text-[1.4rem] leading-none tracking-tight sm:text-[2rem]">
               {title}
             </h2>
           </div>
@@ -46,7 +48,7 @@ function Stat({ value, decimals = 0, suffix = '', label }) {
   })
   return (
     <div ref={ref}>
-      <p className="tabular text-[1.7rem] font-semibold leading-none tracking-tight text-ink sm:text-[2.1rem]">
+      <p className="tabular text-[1.35rem] font-semibold leading-none tracking-tight text-ink sm:text-[2.1rem]">
         {pretty}
         {suffix}
       </p>
@@ -64,15 +66,31 @@ export function Hero() {
           <div className="glass h-full rounded-[26px] p-6 sm:p-8">
             <div className="grid items-center gap-7 lg:grid-cols-[1fr_auto] lg:gap-10">
               <div className="min-w-0">
-                <p className="eyebrow mb-4">{profile.role}</p>
-                <h1 className="text-[2.2rem] leading-[0.95] tracking-tight sm:text-[3rem] lg:text-[3.4rem]">
-                  {profile.name}
-                </h1>
-                <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-ink-soft">
+                <div className="flex items-center gap-4">
+                  <picture className="lg:hidden">
+                    <source srcSet={profile.photo} type="image/webp" />
+                    <img
+                      src={profile.photoFallback}
+                      alt={profile.photoAlt}
+                      width={160}
+                      height={160}
+                      fetchpriority="high"
+                      className="h-[76px] w-[76px] shrink-0 rounded-full object-cover shadow-[0_6px_20px_-6px_rgba(10,10,10,0.28)] ring-[3px] ring-white/80 sm:h-24 sm:w-24"
+                    />
+                  </picture>
+
+                  <div className="min-w-0">
+                    <p className="eyebrow mb-1.5 lg:mb-4">{profile.role}</p>
+                    <h1 className="text-[1.9rem] leading-[0.95] tracking-tight sm:text-[3rem] lg:text-[3.4rem]">
+                      {profile.name}
+                    </h1>
+                  </div>
+                </div>
+                <p className="mt-4 max-w-2xl text-[13.5px] leading-relaxed text-ink-soft sm:text-[15px]">
                   {profile.bio}
                 </p>
 
-                <ul className="mt-6 flex flex-wrap gap-1.5">
+                <ul className="mt-5 flex flex-wrap gap-1.5 sm:mt-6">
                   {profile.coreStack.map((tech) => (
                     <li
                       key={tech}
@@ -83,22 +101,23 @@ export function Hero() {
                   ))}
                 </ul>
 
-                <div className="no-print mt-8 flex flex-wrap items-center gap-2.5">
-                  <EmailButton />
+                <div className="no-print mt-6 flex flex-wrap items-center gap-2 sm:mt-8 sm:gap-2.5">
+                  <EmailButton className="flex-1 sm:flex-none" />
                   <a
                     href={profile.resume}
                     download
-                    className="glass-chip glass-hover inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink"
+                    className="glass-chip glass-hover inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink sm:flex-none"
                   >
                     <IconDownload width={15} height={15} />
-                    Download CV
+                    <span className="sm:hidden">CV</span>
+                    <span className="hidden sm:inline">Download CV</span>
                   </a>
                   <a
                     href={profile.github}
                     target="_blank"
                     rel="noreferrer noopener"
                     aria-label="GitHub"
-                    className="glass-chip glass-hover inline-flex h-10 w-10 items-center justify-center rounded-xl text-muted hover:text-ink"
+                    className="glass-chip glass-hover inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-muted hover:text-ink"
                   >
                     <IconGithub width={17} height={17} />
                   </a>
@@ -107,22 +126,21 @@ export function Hero() {
                     target="_blank"
                     rel="noreferrer noopener"
                     aria-label="LinkedIn"
-                    className="glass-chip glass-hover inline-flex h-10 w-10 items-center justify-center rounded-xl text-muted hover:text-ink"
+                    className="glass-chip glass-hover inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-muted hover:text-ink"
                   >
                     <IconLinkedin width={17} height={17} />
                   </a>
                 </div>
               </div>
 
-              <picture>
+              <picture className="hidden lg:block">
                 <source srcSet={profile.photo} type="image/webp" />
                 <img
                   src={profile.photoFallback}
-                  alt={profile.photoAlt}
+                  alt=""
                   width={240}
                   height={240}
-                  fetchPriority="high"
-                  className="order-first h-28 w-28 rounded-full object-cover shadow-[0_8px_26px_-8px_rgba(10,10,10,0.3)] ring-4 ring-white/80 sm:h-36 sm:w-36 lg:order-none lg:h-40 lg:w-40"
+                  className="h-40 w-40 rounded-full object-cover shadow-[0_8px_26px_-8px_rgba(10,10,10,0.3)] ring-4 ring-white/80"
                 />
               </picture>
             </div>
@@ -201,7 +219,7 @@ function ProjectCard({ project, delay }) {
             height={900}
             loading="lazy"
             decoding="async"
-            className="aspect-[16/7] w-full object-cover object-top"
+            className="aspect-[16/6] w-full object-cover object-top sm:aspect-[16/7]"
           />
         </div>
 
@@ -219,7 +237,9 @@ function ProjectCard({ project, delay }) {
             )}
           </div>
           <p className="mt-1 font-mono text-[13px] text-muted">{project.tagline}</p>
-          <p className="mt-3 text-[14px] leading-relaxed text-ink-soft">{project.description}</p>
+          <p className="mt-3 line-clamp-3 text-[13px] leading-relaxed text-ink-soft sm:line-clamp-none sm:text-[14px]">
+            {project.description}
+          </p>
 
           <div className="mt-4 flex flex-wrap gap-1.5">
             {project.stack.map((tech) => (
@@ -289,7 +309,9 @@ function RoleCard({ job, delay }) {
           </div>
         </div>
 
-        <p className="mt-4 text-[14px] leading-relaxed text-ink-soft">{job.story}</p>
+        <p className="mt-4 line-clamp-4 text-[13px] leading-relaxed text-ink-soft sm:line-clamp-none sm:text-[14px]">
+          {job.story}
+        </p>
 
         <Diagram diagram={job.diagram} />
 
@@ -335,3 +357,62 @@ export function Tools() {
   )
 }
 
+
+export function Contact() {
+  return (
+    <Section id="contact" title="Contact">
+      <Reveal>
+        <div className="glass rounded-[24px] p-6 text-center sm:p-10 lg:p-14">
+          <p className="mx-auto max-w-lg text-[15px] leading-relaxed text-muted sm:text-base">
+            I am looking for backend work, remote or in Lahore. If something here
+            matches what you need, email is the fastest way to reach me.
+          </p>
+
+          <a
+            href={gmailWebUrl(profile.email)}
+            onClick={(e) => openGmail(e, profile.email)}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="group mt-6 inline-flex max-w-full items-center gap-3 font-mono text-[15px] leading-tight tracking-tight text-ink transition-opacity hover:opacity-70 sm:mt-8 sm:text-[1.75rem]"
+          >
+            <span className="break-all">{profile.email}</span>
+            <IconArrow
+              width={20}
+              height={20}
+              className="hidden shrink-0 transition-transform duration-300 group-hover:translate-x-1 sm:block"
+            />
+          </a>
+
+          <div className="no-print mt-7 flex flex-wrap items-center justify-center gap-2 sm:mt-9">
+            <a
+              href={profile.resume}
+              download
+              className="glass-chip glass-hover inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink"
+            >
+              <IconDownload width={15} height={15} />
+              Download CV
+            </a>
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="glass-chip glass-hover inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink"
+            >
+              <IconGithub width={15} height={15} />
+              GitHub
+            </a>
+            <a
+              href={profile.linkedin}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="glass-chip glass-hover inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink"
+            >
+              <IconLinkedin width={15} height={15} />
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </Reveal>
+    </Section>
+  )
+}

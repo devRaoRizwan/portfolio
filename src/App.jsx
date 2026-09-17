@@ -1,5 +1,5 @@
-import MobileNav from './components/MobileNav'
-import { Hero, Projects, Experience, Tools } from './components/Sections'
+import { Analytics } from '@vercel/analytics/react'
+import { Hero, Projects, Experience, Tools, Contact } from './components/Sections'
 
 export default function App() {
   return (
@@ -17,13 +17,14 @@ export default function App() {
 
       <Hero />
 
-      <main id="main" className="pb-24 lg:pb-10">
+      <main id="main" className="pb-6 lg:pb-10">
         <Projects />
         <Experience />
         <Tools />
+        <Contact />
       </main>
 
-      <MobileNav />
+      <Analytics />
     </>
   )
 }

@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+
+const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 export function Reveal({ children, delay = 0, as: Tag = 'div', className = '', id }) {
   const ref = useRef(null)
@@ -10,6 +12,14 @@ export function Reveal({ children, delay = 0, as: Tag = 'div', className = '', i
       setVisible(true)
       return
     }
+    // Anything already on screen reveals immediately. Waiting on the
+    // observer's first callback leaves hydrated markup stuck at opacity 0.
+    const rect = node.getBoundingClientRect()
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setVisible(true)
+      return
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -169,48 +179,6 @@ export function LogoGrid({ items }) {
   )
 }
 
-export const IconLayers = (p) => (
-  <svg {...base} {...p}>
-    <polygon points="12 2 2 7 12 12 22 7 12 2" />
-    <polyline points="2 17 12 22 22 17" />
-    <polyline points="2 12 12 17 22 12" />
-  </svg>
-)
-
-export const IconBriefcase = (p) => (
-  <svg {...base} {...p}>
-    <rect x="2" y="7" width="20" height="14" rx="2" />
-    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-  </svg>
-)
-
-export const IconWrench = (p) => (
-  <svg {...base} {...p}>
-    <path d="M14.7 6.3a4 4 0 0 0 5 5l-9.4 9.4a2.1 2.1 0 0 1-3-3z" />
-    <path d="M14.7 6.3 18 3l3 3-3.3 3.3" />
-  </svg>
-)
-
-export const IconSparkle = (p) => (
-  <svg {...base} {...p}>
-    <path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z" />
-  </svg>
-)
-
-export const IconUser = (p) => (
-  <svg {...base} {...p}>
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </svg>
-)
-
-export const IconCheck = (p) => (
-  <svg {...base} {...p}>
-    <polyline points="20 6 9 17 4 12" />
-  </svg>
-)
-
-
 export const gmailWebUrl = (email) =>
   `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`
 
@@ -238,10 +206,11 @@ export function openGmail(event, email) {
 }
 
 export function useCountUp(target, { duration = 1400, decimals = 0 } = {}) {
-  const [value, setValue] = useState(0)
+  // Starts at the real value so server rendered and no-JS output is correct.
+  const [value, setValue] = useState(target)
   const ref = useRef(null)
 
-  useEffect(() => {
+  useIsoLayoutEffect(() => {
     const node = ref.current
     if (!node) return
 
@@ -254,19 +223,33 @@ export function useCountUp(target, { duration = 1400, decimals = 0 } = {}) {
       return
     }
 
+    setValue(0)
+
     let frame = null
+    const run = () => {
+      const start = performance.now()
+      const tick = (now) => {
+        const t = Math.min(1, (now - start) / duration)
+        const eased = 1 - Math.pow(1 - t, 3)
+        setValue(target * eased)
+        if (t < 1) frame = requestAnimationFrame(tick)
+      }
+      frame = requestAnimationFrame(tick)
+    }
+
+    const rect = node.getBoundingClientRect()
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      run()
+      return () => {
+        if (frame !== null) cancelAnimationFrame(frame)
+      }
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return
         observer.disconnect()
-        const start = performance.now()
-        const tick = (now) => {
-          const t = Math.min(1, (now - start) / duration)
-          const eased = 1 - Math.pow(1 - t, 3)
-          setValue(target * eased)
-          if (t < 1) frame = requestAnimationFrame(tick)
-        }
-        frame = requestAnimationFrame(tick)
+        run()
       },
       { threshold: 0.4 }
     )

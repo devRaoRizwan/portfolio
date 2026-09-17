@@ -1,10 +1,18 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const root = document.getElementById('root')
+const tree = (
   <React.StrictMode>
     <App />
   </React.StrictMode>
 )
+
+// Prerendered HTML is hydrated; a bare shell is mounted fresh.
+if (root.hasChildNodes()) {
+  hydrateRoot(root, tree)
+} else {
+  createRoot(root).render(tree)
+}
