@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export function Reveal({ children, delay = 0, as: Tag = 'div', className = '' }) {
+export function Reveal({ children, delay = 0, as: Tag = 'div', className = '', id }) {
   const ref = useRef(null)
   const [visible, setVisible] = useState(false)
 
@@ -26,6 +26,7 @@ export function Reveal({ children, delay = 0, as: Tag = 'div', className = '' })
   return (
     <Tag
       ref={ref}
+      id={id}
       className={`reveal ${visible ? 'is-visible' : ''} ${className}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
@@ -139,7 +140,7 @@ export const IconArrow = (p) => (
 
 export function LogoGrid({ items }) {
   return (
-    <ul className="grid grid-cols-4 gap-1.5 sm:grid-cols-5 sm:gap-2 lg:grid-cols-6">
+    <ul className="grid grid-cols-4 gap-1.5 @sm:gap-2 @md:grid-cols-5 @2xl:grid-cols-6">
       {items.map((item) => (
         <li key={item.name}>
           <div className="glass glass-hover flex h-full flex-col items-center gap-2 rounded-xl px-1.5 py-3 sm:gap-2.5 sm:rounded-2xl sm:px-2 sm:py-5">
@@ -234,4 +235,47 @@ export function openGmail(event, email) {
   window.addEventListener('pagehide', () => clearTimeout(fallback), { once: true })
 
   window.location.href = `googlegmail://co?to=${encodeURIComponent(email)}`
+}
+
+export function useCountUp(target, { duration = 1400, decimals = 0 } = {}) {
+  const [value, setValue] = useState(0)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const node = ref.current
+    if (!node) return
+
+    const reduced =
+      typeof matchMedia !== 'undefined' &&
+      matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (reduced || typeof IntersectionObserver === 'undefined') {
+      setValue(target)
+      return
+    }
+
+    let frame = null
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        observer.disconnect()
+        const start = performance.now()
+        const tick = (now) => {
+          const t = Math.min(1, (now - start) / duration)
+          const eased = 1 - Math.pow(1 - t, 3)
+          setValue(target * eased)
+          if (t < 1) frame = requestAnimationFrame(tick)
+        }
+        frame = requestAnimationFrame(tick)
+      },
+      { threshold: 0.4 }
+    )
+    observer.observe(node)
+    return () => {
+      observer.disconnect()
+      if (frame !== null) cancelAnimationFrame(frame)
+    }
+  }, [target, duration])
+
+  return [ref, value.toFixed(decimals)]
 }

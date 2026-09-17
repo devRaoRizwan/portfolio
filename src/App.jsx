@@ -1,9 +1,5 @@
-import Rail from './components/Rail'
 import MobileNav from './components/MobileNav'
-import Work from './components/Work'
-import Projects from './components/Projects'
-import Stack from './components/Stack'
-import AITools from './components/AITools'
+import { Hero, Projects, Experience, Tools } from './components/Sections'
 
 export default function App() {
   return (
@@ -19,18 +15,13 @@ export default function App() {
         <i />
       </div>
 
-      <div className="mx-auto w-full max-w-[1500px] px-4 pb-24 sm:px-6 lg:px-8 lg:pb-0">
-        <div className="grid gap-3 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-10 xl:grid-cols-[380px_minmax(0,1fr)]">
-          <Rail />
+      <Hero />
 
-          <main id="main" className="min-w-0 pb-6 lg:py-6">
-            <Projects />
-            <Work />
-            <Stack />
-            <AITools />
-          </main>
-        </div>
-      </div>
+      <main id="main" className="pb-24 lg:pb-10">
+        <Projects />
+        <Experience />
+        <Tools />
+      </main>
 
       <MobileNav />
     </>

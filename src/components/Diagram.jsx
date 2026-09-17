@@ -197,9 +197,9 @@ function Node({ node }) {
 
 function Connector({ always = 'responsive' }) {
   const rotation =
-    always === 'down' ? 'rotate-90' : always === 'right' ? '' : 'rotate-90 md:rotate-0'
+    always === 'down' ? 'rotate-90' : always === 'right' ? '' : 'rotate-90 @2xl:rotate-0'
   return (
-    <div aria-hidden className="flex shrink-0 items-center justify-center py-0.5 text-faint md:px-0.5">
+    <div aria-hidden className="flex shrink-0 items-center justify-center py-0.5 text-faint @2xl:px-0.5">
       <svg width="15" height="15" {...stroke} className={rotation}>
         <line x1="4" y1="12" x2="18" y2="12" />
         <polyline points="13 7 18 12 13 17" />
@@ -216,11 +216,11 @@ function Lane({ lane }) {
   return (
     <div>
       {lane.label && <LaneLabel>{lane.label}</LaneLabel>}
-      <div className="flex flex-col items-stretch md:flex-row md:items-stretch">
+      <div className="flex flex-col items-stretch @2xl:flex-row @2xl:items-stretch">
         {lane.nodes.map((node, i) => (
           <div
             key={node.label}
-            className="flex flex-col items-stretch md:flex-1 md:flex-row md:items-stretch"
+            className="flex flex-col items-stretch @2xl:flex-1 @2xl:flex-row @2xl:items-stretch"
           >
             <Node node={node} />
             {i < lane.nodes.length - 1 && <Connector />}
@@ -244,19 +244,19 @@ function Split({ diagram }) {
   )
 
   return (
-    <div className="flex flex-col items-stretch gap-2 md:flex-row md:items-stretch">
+    <div className="flex flex-col items-stretch gap-2 @2xl:flex-row @2xl:items-stretch">
       {column(diagram.sources, diagram.sourcesLabel)}
 
-      <div className="flex items-center justify-center md:self-stretch">
+      <div className="flex items-center justify-center @2xl:self-stretch">
         <Connector />
       </div>
 
       <div className="flex flex-1 flex-col">
         {diagram.gateLabel && <LaneLabel>{diagram.gateLabel}</LaneLabel>}
         <div className="flex flex-1 items-center">
-          <div className="flex w-full flex-col items-stretch md:flex-row">
+          <div className="flex w-full flex-col items-stretch @2xl:flex-row">
             {diagram.gate.map((node, i) => (
-              <div key={node.label} className="flex flex-col md:flex-1 md:flex-row">
+              <div key={node.label} className="flex flex-col @2xl:flex-1 @2xl:flex-row">
                 <Node node={node} />
                 {i < diagram.gate.length - 1 && <Connector />}
               </div>
@@ -265,7 +265,7 @@ function Split({ diagram }) {
         </div>
       </div>
 
-      <div className="flex items-center justify-center md:self-stretch">
+      <div className="flex items-center justify-center @2xl:self-stretch">
         <Connector />
       </div>
 

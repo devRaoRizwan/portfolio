@@ -59,8 +59,9 @@
     letter-spacing: -0.025em;
     line-height: 1.15;
   }
-  section[id] {
-    scroll-margin-top: 24px;
+  section[id],
+  [id='education'] {
+    scroll-margin-top: 96px;
   }
   @media (min-width: 1024px) {
     main > section:first-child {
@@ -273,6 +274,20 @@
 .reveal.is-visible {
   opacity: 1;
   transform: none;
+}
+
+@keyframes head-flash {
+  0% {
+    background: rgba(10, 10, 10, 0.07);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+.section-head.flash {
+  border-radius: 12px;
+  animation: head-flash 1.4s ease-out;
 }
 
 .tabular {
