@@ -115,7 +115,7 @@ export function Hero() {
                   <a
                     href={profile.github}
                     target="_blank"
-                    rel="noreferrer noopener"
+                    rel="me noreferrer noopener"
                     aria-label="GitHub"
                     className="glass-chip glass-hover inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-muted hover:text-ink"
                   >
@@ -124,7 +124,7 @@ export function Hero() {
                   <a
                     href={profile.linkedin}
                     target="_blank"
-                    rel="noreferrer noopener"
+                    rel="me noreferrer noopener"
                     aria-label="LinkedIn"
                     className="glass-chip glass-hover inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-muted hover:text-ink"
                   >

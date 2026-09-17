@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#ffffff" />
 
-    <title>Rao Rizwan | Backend Engineer</title>
+    <title>Rao Rizwan | Backend Engineer, Python and Django</title>
     <meta name="author" content="Rao Rizwan" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="googlebot" content="index, follow" />
     <meta
       name="description"
-      content="Rao Rizwan is a backend engineer in Lahore working with Python, Django REST Framework, Celery, PostgreSQL, and AWS."
+      content="Backend engineer in Lahore building Python services: Django REST APIs at 100,000 requests a day, Celery workers, and automated security scanning in CI/CD."
     />
     <link rel="canonical" href="https://devraorizwan.online/" />
 
@@ -20,28 +20,29 @@
     <meta property="og:url" content="https://devraorizwan.online/" />
     <meta property="og:site_name" content="Rao Rizwan" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:title" content="Rao Rizwan | Backend Engineer" />
+    <meta property="og:title" content="Rao Rizwan | Backend Engineer, Python and Django" />
     <meta
       property="og:description"
-      content="Rao Rizwan is a backend engineer in Lahore working with Python, Django REST Framework, Celery, PostgreSQL, and AWS."
+      content="Backend engineer in Lahore building Python services: Django REST APIs at 100,000 requests a day, Celery workers, and automated security scanning in CI/CD."
     />
     <meta property="og:image" content="https://devraorizwan.online/images/og.png" />
     <meta property="og:image:alt" content="Rao Rizwan, backend engineer" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Rao Rizwan | Backend Engineer" />
+    <meta name="twitter:title" content="Rao Rizwan | Backend Engineer, Python and Django" />
     <meta
       name="twitter:description"
-      content="Rao Rizwan is a backend engineer in Lahore working with Python, Django REST Framework, Celery, PostgreSQL, and AWS."
+      content="Backend engineer in Lahore building Python services: Django REST APIs at 100,000 requests a day, Celery workers, and automated security scanning in CI/CD."
     />
     <meta name="twitter:image" content="https://devraorizwan.online/images/og.png" />
     <meta name="twitter:image:alt" content="Rao Rizwan, backend engineer" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/images/rao-sm.webp" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
+    <link rel="preload" as="image" href="/images/rao.webp" type="image/webp" fetchpriority="high" />
     <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/jetbrains-mono.woff2" as="font" type="font/woff2" crossorigin />
 
@@ -51,75 +52,184 @@
 
     <!-- Structured data: connects the site, profile, and public identity -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "Person",
-            "@id": "https://devraorizwan.online/#rao-rizwan",
-            "name": "Rao Rizwan",
-            "alternateName": "RaoRizwan",
-            "givenName": "Rao",
-            "familyName": "Rizwan",
-            "jobTitle": "Backend Engineer",
-            "description": "Backend engineer in Lahore building Python and Django APIs, background workers, and cloud infrastructure.",
-            "email": "mailto:dev.raorizwan@gmail.com",
-            "url": "https://devraorizwan.online/",
-            "image": {
-              "@type": "ImageObject",
-              "url": "https://devraorizwan.online/images/rao.webp",
-              "width": 800,
-              "height": 800,
-              "caption": "Rao Rizwan, backend engineer"
-            },
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": "Lahore",
-              "addressCountry": "PK"
-            },
-            "alumniOf": {
-              "@type": "CollegeOrUniversity",
-              "name": "Lahore Garrison University"
-            },
-            "knowsAbout": [
-              "Python",
-              "Django",
-              "Django REST Framework",
-              "Flask",
-              "FastAPI",
-              "PostgreSQL",
-              "MongoDB",
-              "Celery",
-              "RabbitMQ",
-              "Docker",
-              "AWS",
-              "REST API design"
-            ],
-            "sameAs": [
-              "https://github.com/devRaoRizwan",
-              "https://linkedin.com/in/raorixwan"
-            ]
-          },
-          {
-            "@type": "ProfilePage",
-            "@id": "https://devraorizwan.online/#profile",
-            "url": "https://devraorizwan.online/",
-            "name": "Rao Rizwan | Backend Engineer",
-            "isPartOf": { "@id": "https://devraorizwan.online/#website" },
-            "mainEntity": { "@id": "https://devraorizwan.online/#rao-rizwan" },
-            "about": { "@id": "https://devraorizwan.online/#rao-rizwan" }
-          },
-          {
-            "@type": "WebSite",
-            "@id": "https://devraorizwan.online/#website",
-            "url": "https://devraorizwan.online/",
-            "name": "Rao Rizwan",
-            "description": "The personal portfolio of Rao Rizwan, a backend engineer in Lahore.",
-            "publisher": { "@id": "https://devraorizwan.online/#rao-rizwan" },
-            "inLanguage": "en-US"
-          }
-        ]
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://devraorizwan.online/#rao-rizwan",
+      "name": "Rao Rizwan",
+      "alternateName": "RaoRizwan",
+      "givenName": "Rao",
+      "familyName": "Rizwan",
+      "jobTitle": "Backend Engineer",
+      "description": "Backend engineer in Lahore building Python services: Django REST APIs at 100,000 requests a day, Celery workers, and automated security scanning in CI/CD.",
+      "email": "mailto:dev.raorizwan@gmail.com",
+      "telephone": "+92-323-454-4880",
+      "url": "https://devraorizwan.online/",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://devraorizwan.online/images/rao.webp",
+        "width": 800,
+        "height": 800,
+        "caption": "Rao Rizwan, backend engineer"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Lahore",
+        "addressRegion": "Punjab",
+        "addressCountry": "PK"
+      },
+      "nationality": {
+        "@type": "Country",
+        "name": "Pakistan"
+      },
+      "knowsLanguage": [
+        {
+          "@type": "Language",
+          "name": "English",
+          "alternateName": "en"
+        },
+        {
+          "@type": "Language",
+          "name": "Urdu",
+          "alternateName": "ur"
+        }
+      ],
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Lahore Garrison University",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Lahore",
+          "addressCountry": "PK"
+        }
+      },
+      "hasOccupation": {
+        "@type": "Occupation",
+        "name": "Backend Engineer",
+        "occupationLocation": {
+          "@type": "City",
+          "name": "Lahore"
+        },
+        "skills": "Python, Django, Django REST Framework, Flask, FastAPI, REST API design, PostgreSQL, MongoDB, Celery, RabbitMQ, Docker, AWS, CI/CD, OAuth 2.0, JWT",
+        "responsibilities": "Designing REST APIs, moving slow work onto background workers, database schema and query optimisation, and wiring security scanning into delivery pipelines.",
+        "experienceRequirements": {
+          "@type": "OccupationalExperienceRequirements",
+          "monthsOfExperience": 27
+        }
+      },
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Broadstone Technologies",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Lahore",
+          "addressCountry": "PK"
+        }
+      },
+      "knowsAbout": [
+        "Python",
+        "Django",
+        "Django REST Framework",
+        "Flask",
+        "FastAPI",
+        "REST API design",
+        "PostgreSQL",
+        "MongoDB",
+        "Celery",
+        "RabbitMQ",
+        "Docker",
+        "Amazon Web Services",
+        "CI/CD pipelines",
+        "OAuth 2.0",
+        "JWT authentication",
+        "Web scraping",
+        "Software supply chain security",
+        "AI bill of materials"
+      ],
+      "sameAs": [
+        "https://github.com/devRaoRizwan",
+        "https://linkedin.com/in/raorixwan"
+      ]
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": "https://devraorizwan.online/#profile",
+      "url": "https://devraorizwan.online/",
+      "name": "Rao Rizwan | Backend Engineer, Python and Django",
+      "description": "Backend engineer in Lahore building Python services: Django REST APIs at 100,000 requests a day, Celery workers, and automated security scanning in CI/CD.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://devraorizwan.online/#website"
+      },
+      "mainEntity": {
+        "@id": "https://devraorizwan.online/#rao-rizwan"
+      },
+      "about": {
+        "@id": "https://devraorizwan.online/#rao-rizwan"
+      },
+      "primaryImageOfPage": {
+        "@id": "https://devraorizwan.online/#og"
       }
+    },
+    {
+      "@type": "ImageObject",
+      "@id": "https://devraorizwan.online/#og",
+      "url": "https://devraorizwan.online/images/og.png",
+      "width": 1200,
+      "height": 630,
+      "caption": "Rao Rizwan, backend engineer"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://devraorizwan.online/#website",
+      "url": "https://devraorizwan.online/",
+      "name": "Rao Rizwan",
+      "description": "The portfolio of Rao Rizwan, a backend engineer in Lahore.",
+      "publisher": {
+        "@id": "https://devraorizwan.online/#rao-rizwan"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://devraorizwan.online/#jobharvester",
+      "name": "JobHarvester",
+      "description": "Job aggregation platform for the Pakistani tech market. Scheduled crawlers feed a Django REST API backed by PostgreSQL, with a React frontend.",
+      "url": "https://job-harvester-demo.vercel.app",
+      "codeRepository": "https://github.com/devRaoRizwan/JobHarvesterDemo",
+      "programmingLanguage": [
+        "Python",
+        "JavaScript"
+      ],
+      "runtimePlatform": [
+        "Django REST Framework",
+        "React",
+        "PostgreSQL",
+        "GitHub Actions"
+      ],
+      "author": {
+        "@id": "https://devraorizwan.online/#rao-rizwan"
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://devraorizwan.online/#jobbr",
+      "name": "Jobbr",
+      "description": "Job board REST API with JWT authentication and role based access control separating employer and job seeker permissions.",
+      "codeRepository": "https://github.com/devRaoRizwan/jobbr",
+      "programmingLanguage": "Python",
+      "runtimePlatform": [
+        "Django REST Framework",
+        "PostgreSQL"
+      ],
+      "author": {
+        "@id": "https://devraorizwan.online/#rao-rizwan"
+      }
+    }
+  ]
+}
     </script>
   </head>
   <body>
