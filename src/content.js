@@ -88,6 +88,42 @@ export const work = [
 
 export const projects = [
   {
+    name: 'SiteScopia',
+    tagline: 'Evidence-led website analysis',
+    cover: {
+      image: '/images/sitescopia.png',
+      alt: 'SiteScopia website analyzer interface',
+    },
+    description: `Analyze a public URL across SEO, accessibility, security,
+      performance, and domain signals. Every finding includes evidence and a
+      practical fix.`,
+    diagram: {
+      caption: 'How a page becomes an actionable report',
+      kind: 'flow',
+      lanes: [
+        {
+          label: 'One public URL, checked safely',
+          nodes: [
+            { icon: 'ui:globe', label: 'URL', sub: 'Validate and fetch' },
+            { icon: 'tech:fastapi', label: 'API', sub: 'Analysis job' },
+            { icon: 'ui:shield', label: 'Checks', sub: 'SEO, security, a11y' },
+            { icon: 'tech:react', label: 'Report', sub: 'Evidence and fixes' },
+          ],
+        },
+      ],
+      note: 'Safe fetching, independent checks, and evidence-backed fixes in one report.',
+    },
+    stack: ['React', 'Vite', 'FastAPI', 'Python'],
+    links: {
+      live: 'https://sitescopia.online/',
+      overview: 'https://github.com/devRaoRizwan/sitescopia',
+      frontend: null,
+      backend: null,
+      crawlers: null,
+    },
+    featured: true,
+  },
+  {
     name: 'JobHarvester',
     tagline: 'Job aggregation for the Pakistani tech market',
     cover: {
