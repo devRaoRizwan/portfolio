@@ -15,6 +15,9 @@ import {
   IconLinkedin,
   IconDownload,
   IconArrow,
+  IconMail,
+  IconCopy,
+  IconCheck,
 } from './ui'
 
 // Rounded down to the hundred so "1,400+" stays true between daily refreshes.
@@ -427,59 +430,128 @@ export function Tools() {
 }
 
 
+function CopyEmail() {
+  const [copied, setCopied] = useState(false)
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1800)
+    } catch {
+      window.location.href = `mailto:${profile.email}`
+    }
+  }
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
+    >
+      {copied ? <IconCheck width={15} height={15} /> : <IconCopy width={15} height={15} />}
+      <span aria-live="polite">{copied ? 'Copied' : 'Copy email'}</span>
+    </button>
+  )
+}
+
+function ContactRow({ href, icon, label, value, external = true, download = false, onClick }) {
+  return (
+    <li>
+      <a
+        href={href}
+        onClick={onClick}
+        {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}
+        {...(download ? { download: true } : {})}
+        className="group flex items-center gap-4 rounded-2xl px-3 py-3.5 transition-colors hover:bg-white/[0.06] sm:px-4"
+      >
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
+          {icon}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-[12px] text-white/50">{label}</span>
+          <span className="block truncate text-[14px] font-medium text-white">{value}</span>
+        </span>
+        <IconArrow
+          width={16}
+          height={16}
+          className="shrink-0 text-white/40 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-white"
+        />
+      </a>
+    </li>
+  )
+}
+
 export function Contact() {
+  const handle = (url) => new URL(url).pathname.split('/').filter(Boolean).pop()
   return (
     <Section id="contact" title="Contact">
       <Reveal>
-        <div className="glass rounded-[24px] p-6 text-center sm:p-10 lg:p-14">
-          <p className="mx-auto max-w-lg text-[15px] leading-relaxed text-muted sm:text-base">
-            I am looking for backend work, remote or in Lahore. If something here
-            matches what you need, email is the fastest way to reach me.
-          </p>
+        <div className="relative overflow-hidden rounded-[26px] bg-[#0b0b0f] p-6 text-white shadow-[0_30px_60px_-28px_rgba(10,10,10,0.55)] sm:p-10 lg:p-12">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(600px_320px_at_0%_0%,rgba(255,255,255,0.09),transparent_70%),radial-gradient(520px_300px_at_100%_100%,rgba(16,185,129,0.12),transparent_70%)]"
+          />
+          <div className="relative grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-14">
+            <div>
+              {profile.openTo && (
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#10b981]/30 bg-[#10b981]/10 px-3 py-1 text-[12px] font-medium text-[#6ee7b7]">
+                  <span aria-hidden className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#10b981] opacity-70" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#10b981]" />
+                  </span>
+                  {profile.openTo}
+                </span>
+              )}
+              <h3 className="mt-5 text-[1.9rem] font-semibold leading-[1.05] tracking-tight text-white sm:text-[2.6rem]">
+                Need a backend that holds up under load?
+              </h3>
+              <p className="mt-4 max-w-md text-[15px] leading-relaxed text-white/65">
+                I am looking for backend work, remote or on site in Lahore. If something
+                here matches what you need, email is the fastest way to reach me.
+              </p>
+              <div className="no-print mt-7 flex flex-wrap gap-2.5">
+                <a
+                  href={gmailWebUrl(profile.email)}
+                  onClick={(e) => openGmail(e, profile.email)}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white/85"
+                >
+                  <IconMail width={15} height={15} />
+                  Email me
+                </a>
+                <CopyEmail />
+              </div>
+            </div>
 
-          <a
-            href={gmailWebUrl(profile.email)}
-            onClick={(e) => openGmail(e, profile.email)}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="group mt-6 inline-flex max-w-full items-center gap-3 font-mono text-[15px] leading-tight tracking-tight text-ink transition-opacity hover:opacity-70 sm:mt-8 sm:text-[1.75rem]"
-          >
-            <span className="break-all">{profile.email}</span>
-            <IconArrow
-              width={20}
-              height={20}
-              className="hidden shrink-0 transition-transform duration-300 group-hover:translate-x-1 sm:block"
-            />
-          </a>
-
-          <div className="no-print mx-auto mt-7 grid max-w-md grid-cols-3 gap-2 sm:mt-9 sm:flex sm:max-w-none sm:items-center sm:justify-center">
-            <a
-              href={profile.resume}
-              download
-              className="glass-chip glass-hover inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-ink sm:px-4"
-            >
-              <IconDownload width={15} height={15} />
-              <span className="sm:hidden">CV</span>
-              <span className="hidden sm:inline">Download CV</span>
-            </a>
-            <a
-              href={profile.github}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="glass-chip glass-hover inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-ink sm:px-4"
-            >
-              <IconGithub width={15} height={15} />
-              GitHub
-            </a>
-            <a
-              href={profile.linkedin}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="glass-chip glass-hover inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-ink sm:px-4"
-            >
-              <IconLinkedin width={15} height={15} />
-              LinkedIn
-            </a>
+            <ul className="-mx-3 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.03] p-1.5 sm:mx-0">
+              <ContactRow
+                href={gmailWebUrl(profile.email)}
+                onClick={(e) => openGmail(e, profile.email)}
+                icon={<IconMail width={17} height={17} />}
+                label="Email"
+                value={profile.email}
+              />
+              <ContactRow
+                href={profile.linkedin}
+                icon={<IconLinkedin width={17} height={17} />}
+                label="LinkedIn"
+                value={`in/${handle(profile.linkedin)}`}
+              />
+              <ContactRow
+                href={profile.github}
+                icon={<IconGithub width={17} height={17} />}
+                label="GitHub"
+                value={`@${handle(profile.github)}`}
+              />
+              <ContactRow
+                href={profile.resume}
+                external={false}
+                download
+                icon={<IconDownload width={17} height={17} />}
+                label="Resume"
+                value="Download CV (PDF)"
+              />
+            </ul>
           </div>
         </div>
       </Reveal>
