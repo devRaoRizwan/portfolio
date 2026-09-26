@@ -25,9 +25,14 @@ function withMeta(html, path, meta) {
     .replace(/(name="twitter:description"\s+content=")[^"]*/, `$1${description}`)
 }
 
-for (const { path, meta } of routes) {
+// JSON-LD is script content, so only a closing tag could break out of it.
+const jsonLd = (data) =>
+  `    <script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>\n  </head>`
+
+for (const { path, meta, schema } of routes) {
   const html = render(path)
-  const page = withMeta(template, path, meta).replace('<div id="root"></div>', `<div id="root">${html}</div>`)
+  let page = withMeta(template, path, meta).replace('<div id="root"></div>', `<div id="root">${html}</div>`)
+  if (schema) page = page.replace('</head>', jsonLd(schema))
   const dir = resolve(dist, `.${path}`)
   mkdirSync(dir, { recursive: true })
   writeFileSync(resolve(dir, 'index.html'), page)
@@ -37,18 +42,19 @@ rmSync(resolve('dist-ssr'), { recursive: true, force: true })
 
 // The sitemap is built from the same route list, stamped with this build's date.
 const today = new Date().toISOString().slice(0, 10)
-const entries = routes.map(({ path }) =>
+const entries = routes.map(({ path, images = [] }) =>
   [
     '  <url>',
     `    <loc>${SITE}${path}</loc>`,
     `    <lastmod>${today}</lastmod>`,
     '    <changefreq>monthly</changefreq>',
     `    <priority>${path === '/' ? '1.0' : '0.8'}</priority>`,
+    ...images.map((src) => `    <image:image><image:loc>${SITE}${src}</image:loc></image:image>`),
     '  </url>',
   ].join('\n')
 )
 writeFileSync(
   resolve(dist, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries.join('\n')}\n</urlset>\n`
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n${entries.join('\n')}\n</urlset>\n`
 )
 console.log(`sitemap written with ${routes.length} pages`)

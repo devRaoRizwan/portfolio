@@ -124,7 +124,11 @@ export function Hero() {
                   </picture>
 
                   <div className="min-w-0">
-                    <p className="eyebrow mb-1.5 lg:mb-4">{profile.role}</p>
+                    <p className="eyebrow mb-1.5 lg:mb-4">
+                      {profile.role}
+                      <span className="hidden text-faint/70 sm:inline"> · </span>
+                      <span className="block sm:inline">{profile.location}</span>
+                    </p>
                     <h1 className="text-[1.9rem] leading-[0.95] tracking-tight sm:text-[3rem] lg:text-[3.4rem]">
                       {profile.name}
                     </h1>
@@ -181,7 +185,7 @@ export function Hero() {
                 <source srcSet={profile.photo} type="image/webp" />
                 <img
                   src={profile.photoFallback}
-                  alt=""
+                  alt={profile.photoAlt}
                   width={240}
                   height={240}
                   className="h-40 w-40 rounded-full object-cover shadow-[0_8px_26px_-8px_rgba(10,10,10,0.3)] ring-4 ring-white/80"

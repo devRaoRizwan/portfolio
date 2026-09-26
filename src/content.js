@@ -20,9 +20,9 @@ export const profile = {
   location: 'Lahore, Pakistan',
   availability: 'Remote, or on site in Lahore',
 
-  photo: '/images/rao-320.webp',
-  photoFallback: '/images/rao-320.jpg',
-  photoAlt: 'Rao Rizwan',
+  photo: '/images/rao-rizwan-320.webp',
+  photoFallback: '/images/rao-rizwan-320.jpg',
+  photoAlt: 'Rao Rizwan, Python backend engineer in Lahore, Pakistan',
 }
 
 export const work = [
