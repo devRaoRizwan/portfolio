@@ -1,0 +1,20 @@
+# Redeploys the site once a day so the Activity section picks up fresh
+# GitHub and LeetCode numbers. Needs a Vercel deploy hook URL stored as the
+# VERCEL_DEPLOY_HOOK repository secret.
+name: Refresh activity
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel deploy hook
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then echo "VERCEL_DEPLOY_HOOK is not set"; exit 1; fi
+          curl -fsS -X POST "$HOOK"

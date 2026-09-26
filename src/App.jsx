@@ -1,5 +1,6 @@
 import { Analytics } from '@vercel/analytics/react'
 import { Hero, Projects, Experience, Tools, Contact } from './components/Sections'
+import Activity from './components/Activity'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
       <main id="main" className="pb-6 lg:pb-10">
         <Projects />
         <Experience />
+        <Activity />
         <Tools />
         <Contact />
       </main>

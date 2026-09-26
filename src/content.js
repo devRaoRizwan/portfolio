@@ -14,6 +14,7 @@ export const profile = {
 
   github: 'https://github.com/devRaoRizwan',
   linkedin: 'https://linkedin.com/in/raorixwan',
+  leetcode: 'https://leetcode.com/u/devraorizwan/',
 
   photo: '/images/rao.webp',
   photoFallback: '/images/rao.png',

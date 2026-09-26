@@ -4,8 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node prerender.js",
+    "activity": "node scripts/fetch-activity.js",
+    "dev": "npm run activity && vite",
+    "build": "npm run activity && vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node prerender.js",
     "preview": "vite preview"
   },
   "dependencies": {
