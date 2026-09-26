@@ -129,13 +129,20 @@ for (const c of covers) {
     const img = new Image()
     img.src = src
     await img.decode()
-    const canvas = Object.assign(document.createElement('canvas'), { width: img.width, height: img.height })
-    canvas.getContext('2d').drawImage(img, 0, 0)
-    return canvas.toDataURL('image/webp', 0.86).split(',')[1]
+    const encode = (width) => {
+      const height = Math.round((img.height * width) / img.width)
+      const canvas = Object.assign(document.createElement('canvas'), { width, height })
+      const ctx = canvas.getContext('2d')
+      ctx.imageSmoothingQuality = 'high'
+      ctx.drawImage(img, 0, 0, width, height)
+      return canvas.toDataURL('image/webp', 0.86).split(',')[1]
+    }
+    return { 1400: encode(img.width), 800: encode(800) }
   }, `data:image/png;base64,${png.toString('base64')}`)
 
-  writeFileSync(resolve(OUT, `${c.slug}.webp`), Buffer.from(webp, 'base64'))
-  console.log(`[covers] ${c.slug}.webp`)
+  writeFileSync(resolve(OUT, `${c.slug}.webp`), Buffer.from(webp['1400'], 'base64'))
+  writeFileSync(resolve(OUT, `${c.slug}-800.webp`), Buffer.from(webp['800'], 'base64'))
+  console.log(`[covers] ${c.slug}.webp, ${c.slug}-800.webp`)
 }
 
 // Social preview: the light look of the site itself, 1200x630 PNG.

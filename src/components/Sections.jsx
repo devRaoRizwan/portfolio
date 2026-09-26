@@ -106,7 +106,7 @@ export function Hero() {
     <header id="top" className="pt-4 sm:pt-5">
       <Shell>
         <div className="grid items-stretch gap-5 lg:grid-cols-[1.75fr_1fr] lg:gap-6">
-        <Reveal className="h-full">
+        <div className="h-full">
           <div className="glass h-full rounded-[26px] p-6 sm:p-8">
             <div className="grid items-center gap-7 lg:grid-cols-[1fr_auto] lg:gap-10">
               <div className="min-w-0">
@@ -192,11 +192,11 @@ export function Hero() {
             <div className="mt-7 grid grid-cols-2 gap-5 border-t border-[var(--color-line)] pt-6 sm:grid-cols-4">
               <Stat value={100000} suffix="+" label="Requests a day in production" />
               <Stat value={2.3} decimals={1} suffix=" yrs" label="Shipping Python backends" />
-              <Stat value={listings} suffix="+" label="Live listings on JobHarvester" />
+              <Stat value={listings} suffix="+" label="Listings collected by JobHarvester" />
               <Stat value={toolbelt.length} label="Tools used in production" />
             </div>
           </div>
-        </Reveal>
+        </div>
 
         <BackgroundPanel />
         </div>
@@ -208,7 +208,7 @@ export function Hero() {
 function BackgroundPanel() {
   const { education, community } = background
   return (
-    <Reveal delay={80} className="h-full" id="education">
+    <div className="h-full" id="education">
       <div className="glass flex h-full flex-col rounded-[26px] p-6 sm:p-7">
         <div className="section-head -mx-1 mb-5 flex items-baseline gap-3 border-b border-[var(--color-line)] px-1 pb-4">
           <h2 className="text-[1.3rem] leading-none tracking-tight">Background</h2>
@@ -249,11 +249,11 @@ function BackgroundPanel() {
           </div>
         )}
       </div>
-    </Reveal>
+    </div>
   )
 }
 
-function ProjectCard({ project, delay }) {
+function ProjectCard({ project, delay, eager = false }) {
   const repos = [
     { key: 'overview', label: 'Overview' },
     { key: 'frontend', label: 'Frontend' },
@@ -267,10 +267,12 @@ function ProjectCard({ project, delay }) {
         <div className="bg-[#0e0e13]">
           <img
             src={project.cover.image}
+            srcSet={`${project.cover.image.replace('.webp', '-800.webp')} 800w, ${project.cover.image} 1400w`}
+            sizes="(min-width: 1024px) 50vw, 100vw"
             alt={project.cover.alt}
             width={1400}
             height={612}
-            loading="lazy"
+            loading={eager ? 'eager' : 'lazy'}
             decoding="async"
             className="aspect-[16/6] w-full object-cover object-top sm:aspect-[16/7]"
           />
@@ -310,6 +312,15 @@ function ProjectCard({ project, delay }) {
           {project.diagram && <Diagram diagram={project.diagram} />}
 
           <div className="no-print mt-auto flex flex-wrap items-center gap-2 pt-6">
+            {project.caseStudy && (
+              <a
+                href={project.caseStudy}
+                className="glass-chip glass-hover inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink"
+              >
+                Case study
+                <IconArrow width={15} height={15} />
+              </a>
+            )}
             {project.links.live && (
               <a
                 href={project.links.live}
@@ -345,7 +356,7 @@ export function Projects() {
     <Section id="projects" title="Projects">
       <div className="grid items-stretch gap-5 lg:grid-cols-2 lg:gap-6">
         {projects.map((project, i) => (
-          <ProjectCard key={project.name} project={project} delay={i * 80} />
+          <ProjectCard key={project.name} project={project} delay={i * 80} eager={i === 0} />
         ))}
       </div>
     </Section>

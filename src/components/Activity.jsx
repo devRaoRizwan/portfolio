@@ -35,14 +35,14 @@ function buildWeeks(days, levelOf, weeksShown) {
   return weeks
 }
 
-function Grid({ days, levelOf, noun, label, weeksShown, className }) {
+function Grid({ days, levelOf, label, weeksShown, className }) {
   const weeks = buildWeeks(days, levelOf, weeksShown)
   const width = weeksShown * (CELL + GAP) - GAP
   const top = 16
   const height = top + 7 * (CELL + GAP) - GAP
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={label} className={`h-auto w-full ${className}`}>
+    <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={label} className={`h-auto ${className}`}>
       {weeks.map((week, w) => {
         const first = week[0]
         const showMonth = first && first.day <= 7 && w < weeksShown - 2
@@ -61,9 +61,7 @@ function Grid({ days, levelOf, noun, label, weeksShown, className }) {
                 height={CELL}
                 rx={2.5}
                 fill={SHADES[day.level]}
-              >
-                <title>{`${day.count || 'No'} ${noun}${day.count === 1 ? '' : 's'} on ${day.key}`}</title>
-              </rect>
+              />
             ))}
           </g>
         )
@@ -72,13 +70,13 @@ function Grid({ days, levelOf, noun, label, weeksShown, className }) {
   )
 }
 
-// A full year is unreadable at phone width, so phones get the last six months.
+// A full year is unreadable at phone width, so phones see the latest half of
+// the same grid, cropped from the right.
 function Heatmap(props) {
   return (
-    <>
-      <Grid {...props} weeksShown={WEEKS} className="hidden sm:block" />
-      <Grid {...props} weeksShown={26} className="sm:hidden" />
-    </>
+    <div className="flex justify-end overflow-hidden">
+      <Grid {...props} weeksShown={WEEKS} className="w-[204%] max-w-none shrink-0 sm:w-full" />
+    </div>
   )
 }
 
@@ -94,7 +92,7 @@ function Legend() {
   )
 }
 
-function HeatmapCard({ name, handle, logo, url, icon, days, levelOf, noun }) {
+function HeatmapCard({ name, handle, logo, url, icon, days, levelOf }) {
   return (
     <article className="glass flex h-full flex-col rounded-[22px] p-5 sm:p-6">
       <div className="flex items-center justify-between gap-4">
@@ -116,7 +114,7 @@ function HeatmapCard({ name, handle, logo, url, icon, days, levelOf, noun }) {
         </a>
       </div>
       <div className="glass-inset mt-5 rounded-2xl p-3 sm:p-4">
-        <Heatmap days={days} levelOf={levelOf} noun={noun} label={`${name} activity over the last year`} />
+        <Heatmap days={days} levelOf={levelOf} label={`${name} activity over the last year`} />
       </div>
       <div className="mt-3 flex justify-end">
         <Legend />
@@ -142,7 +140,6 @@ export default function Activity() {
               icon={<IconGithub width={15} height={15} />}
               days={github.days}
               levelOf={(day) => day?.level ?? 0}
-              noun="contribution"
             />
           </Reveal>
         )}
@@ -156,7 +153,6 @@ export default function Activity() {
               icon={<IconCode width={15} height={15} />}
               days={leetcode.days}
               levelOf={(_, count) => leetcodeLevel(count)}
-              noun="submission"
             />
           </Reveal>
         )}

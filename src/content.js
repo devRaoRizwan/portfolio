@@ -20,8 +20,8 @@ export const profile = {
   location: 'Lahore, Pakistan',
   availability: 'Remote, or on site in Lahore',
 
-  photo: '/images/rao.webp',
-  photoFallback: '/images/rao.png',
+  photo: '/images/rao-320.webp',
+  photoFallback: '/images/rao-320.jpg',
   photoAlt: 'Rao Rizwan',
 }
 
@@ -95,6 +95,7 @@ export const projects = [
   {
     name: 'BOMWatcher',
     logo: '/logos/projects/bomwatcher.svg',
+    caseStudy: '/projects/bomwatcher',
     tagline: 'An AI bill of materials for your GitHub repos',
     cover: {
       image: '/images/covers/bomwatcher.webp',
@@ -142,6 +143,7 @@ export const projects = [
   {
     name: 'SiteScopia',
     logo: '/logos/projects/sitescopia.svg',
+    caseStudy: '/projects/sitescopia',
     tagline: 'Evidence-led website analysis',
     cover: {
       image: '/images/covers/sitescopia.webp',
@@ -178,6 +180,7 @@ export const projects = [
   {
     name: 'JobHarvester',
     logo: '/logos/projects/jobharvester.webp',
+    caseStudy: '/projects/jobharvester',
     tagline: 'Job aggregation for the Pakistani tech market',
     cover: {
       image: '/images/covers/jobharvester.webp',
@@ -185,7 +188,7 @@ export const projects = [
     },
     description: `Crawlers pull postings from Lahore technology companies on a
       schedule, a Django REST API normalises them into Postgres, and a React
-      frontend makes them searchable. Over {listings} live listings right now.`,
+      frontend makes them searchable. Over {listings} listings collected so far.`,
     diagram: {
       caption: 'How a posting reaches the page',
       kind: 'flow',
