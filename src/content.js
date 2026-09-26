@@ -134,7 +134,6 @@ export const projects = [
       backend: null,
       crawlers: null,
     },
-    featured: true,
   },
   {
     name: 'SiteScopia',
@@ -171,7 +170,6 @@ export const projects = [
       backend: null,
       crawlers: null,
     },
-    featured: true,
   },
   {
     name: 'JobHarvester',
@@ -217,7 +215,6 @@ export const projects = [
       backend: null,
       crawlers: null,
     },
-    featured: true,
   },
   {
     name: 'Jobbr',
@@ -257,7 +254,6 @@ export const projects = [
       backend: 'https://github.com/devRaoRizwan/jobbr',
       crawlers: null,
     },
-    featured: false,
   },
 ]
 

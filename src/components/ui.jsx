@@ -45,20 +45,6 @@ export function Reveal({ children, delay = 0, as: Tag = 'div', className = '', i
   )
 }
 
-export function Section({ id, title, children, className = '', flush = false }) {
-  const pad = flush ? 'pb-6 sm:pb-8 lg:pb-10' : 'py-6 sm:py-8 lg:py-10'
-  return (
-    <section id={id} className={`w-full ${pad} ${className}`}>
-      {title && (
-        <Reveal className="mb-5">
-          <h2 className="text-[1.75rem] sm:text-3xl">{title}</h2>
-        </Reveal>
-      )}
-      {children}
-    </section>
-  )
-}
-
 export function Logo({ src, name, size = 44, className = '' }) {
   const sizedByClass = /(^|\s)(h-|w-|size-)/.test(className)
   const monogram = name
