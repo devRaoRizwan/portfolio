@@ -220,7 +220,7 @@ function ProjectCard({ project, delay }) {
             src={project.cover.image}
             alt={project.cover.alt}
             width={1400}
-            height={900}
+            height={612}
             loading="lazy"
             decoding="async"
             className="aspect-[16/6] w-full object-cover object-top sm:aspect-[16/7]"
@@ -228,19 +228,24 @@ function ProjectCard({ project, delay }) {
         </div>
 
         <div className="flex flex-1 flex-col p-5 sm:p-6">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <h3 className="text-lg font-semibold text-ink sm:text-xl">{project.name}</h3>
-            {project.links.live && (
-              <span className="inline-flex items-center gap-2 font-mono text-xs text-[#047857]">
-                <span aria-hidden className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#10b981] opacity-70" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#10b981]" />
-                </span>
-                Live
-              </span>
-            )}
+          <div className="flex items-start gap-4">
+            <Logo src={project.logo} name={project.name} className="h-12 w-12" />
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h3 className="text-lg font-semibold text-ink sm:text-xl">{project.name}</h3>
+                {project.links.live && (
+                  <span className="inline-flex items-center gap-2 font-mono text-xs text-[#047857]">
+                    <span aria-hidden className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#10b981] opacity-70" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#10b981]" />
+                    </span>
+                    Live
+                  </span>
+                )}
+              </div>
+              <p className="mt-0.5 font-mono text-[13px] text-muted">{project.tagline}</p>
+            </div>
           </div>
-          <p className="mt-1 font-mono text-[13px] text-muted">{project.tagline}</p>
           <p className="mt-3 line-clamp-3 text-[13px] leading-relaxed text-ink-soft sm:line-clamp-none sm:text-[14px]">
             {project.description.replace('{listings}', listings.toLocaleString('en-US'))}
           </p>

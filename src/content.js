@@ -89,11 +89,60 @@ export const work = [
 
 export const projects = [
   {
+    name: 'BOMWatcher',
+    logo: '/logos/projects/bomwatcher.svg',
+    tagline: 'An AI bill of materials for your GitHub repos',
+    cover: {
+      image: '/images/covers/bomwatcher.webp',
+      alt: 'BOMWatcher: know every dependency and AI model your code ships with',
+    },
+    description: `You connect GitHub, choose the repos to watch, and merge one
+      small pull request. After that, every push runs a scan on your own GitHub
+      Actions and reports back which libraries and AI models the code uses,
+      with risky licenses flagged. Your code stays on GitHub the whole time.`,
+    diagram: {
+      caption: 'How a push becomes an AI-BOM',
+      kind: 'flow',
+      lanes: [
+        {
+          label: 'Every push to the default branch',
+          nodes: [
+            { icon: 'tech:github', label: 'Connect', sub: 'GitHub App, one PR' },
+            { icon: 'tech:githubactions', label: 'Scan', sub: 'Syft, AI-model detector' },
+            { icon: 'ui:lock', label: 'Webhook', sub: 'Signed workflow_run' },
+            { icon: 'tech:fastapi', label: 'Ingest', sub: 'Pulls and validates the BOM' },
+            { icon: 'tech:postgresql', label: 'AI-BOM', sub: 'CycloneDX 1.6, Postgres' },
+          ],
+        },
+      ],
+      note: 'The workflow runs with read-only access and uploads only the report. The code is never cloned.',
+    },
+    stack: [
+      'React 19',
+      'FastAPI',
+      'SQLAlchemy',
+      'PostgreSQL',
+      'GitHub Apps',
+      'GitHub Actions',
+      'Syft',
+      'CycloneDX',
+    ],
+    links: {
+      live: 'https://bomwatcher.vercel.app',
+      overview: 'https://github.com/devRaoRizwan/bomwatcher',
+      frontend: null,
+      backend: null,
+      crawlers: null,
+    },
+    featured: true,
+  },
+  {
     name: 'SiteScopia',
+    logo: '/logos/projects/sitescopia.svg',
     tagline: 'Evidence-led website analysis',
     cover: {
-      image: '/images/sitescopia.png',
-      alt: 'SiteScopia website analyzer interface',
+      image: '/images/covers/sitescopia.webp',
+      alt: 'SiteScopia: see what your page is really telling you',
     },
     description: `Analyze a public URL across SEO, accessibility, security,
       performance, and domain signals. Every finding includes evidence and a
@@ -126,10 +175,11 @@ export const projects = [
   },
   {
     name: 'JobHarvester',
+    logo: '/logos/projects/jobharvester.webp',
     tagline: 'Job aggregation for the Pakistani tech market',
     cover: {
-      image: '/images/jobharvester.webp',
-      alt: 'The JobHarvester home page, showing job search and recent listings',
+      image: '/images/covers/jobharvester.webp',
+      alt: 'JobHarvester: a smarter way to discover the right opportunities',
     },
     description: `Crawlers pull postings from Lahore technology companies on a
       schedule, a Django REST API normalises them into Postgres, and a React
@@ -171,10 +221,11 @@ export const projects = [
   },
   {
     name: 'Jobbr',
+    logo: '/logos/projects/jobbr.svg',
     tagline: 'A job board API with two very different users',
     cover: {
-      image: '/images/jobbr.webp',
-      alt: 'The Jobbr API surface: auth, jobs, applications and bookmark endpoints',
+      image: '/images/covers/jobbr.webp',
+      alt: 'Jobbr: one job board API for two very different users',
     },
     description: `Employers and job seekers want opposite things from the same
       data, so the API is built around keeping them apart.`,

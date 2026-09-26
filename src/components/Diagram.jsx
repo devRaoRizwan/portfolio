@@ -9,6 +9,7 @@ const TECH = {
   rabbitmq: '/tech/rabbitmq.svg',
   docker: '/tech/docker.svg',
   aws: '/tech/amazonwebservices.svg',
+  github: '/tech/github.svg',
   githubactions: '/tech/githubactions.svg',
   react: '/tech/react.svg',
   selenium: '/tech/selenium.svg',
