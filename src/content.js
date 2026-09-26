@@ -16,6 +16,10 @@ export const profile = {
   linkedin: 'https://linkedin.com/in/raorixwan',
   leetcode: 'https://leetcode.com/u/devraorizwan/',
 
+  openTo: 'Open to backend roles',
+  location: 'Lahore, Pakistan',
+  availability: 'Open to remote, or on site in Lahore',
+
   photo: '/images/rao.webp',
   photoFallback: '/images/rao.png',
   photoAlt: 'Rao Rizwan',
@@ -281,9 +285,6 @@ export const toolbelt = [
 export const aitools = [
   { name: 'Claude Code', icon: '/tech/claudecode.svg' },
   { name: 'Cursor', icon: '/tech/cursor.svg' },
-  { name: 'ChatGPT', icon: '/tech/chatgpt.svg' },
-  { name: 'Grok', icon: '/tech/grok.svg' },
-  { name: 'DeepSeek', icon: '/tech/deepseek.svg' },
 ]
 
 export const background = {

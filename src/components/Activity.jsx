@@ -82,6 +82,9 @@ function Heatmap(props) {
   )
 }
 
+const shortDate = (iso) =>
+  new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
+
 function githubStats(days) {
   let longest = 0
   let run = 0
@@ -126,6 +129,32 @@ function Languages({ data }) {
             <span className="h-2 w-2 rounded-full" style={{ background: languageColor(l.name) }} />
             <span className="font-medium text-ink">{l.name}</span>
             {l.count} {l.count === 1 ? 'repo' : 'repos'}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function RecentRepos({ repos }) {
+  return (
+    <div className="mb-5">
+      <p className="eyebrow mb-2.5">Recently worked on</p>
+      <ul className="divide-y divide-[var(--color-line)]">
+        {repos.map((r) => (
+          <li key={r.url}>
+            <a
+              href={r.url}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex items-center justify-between gap-3 py-2.5 text-[13px] text-ink-soft hover:text-ink"
+            >
+              <span className="flex min-w-0 items-center gap-2">
+                <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: languageColor(r.language) }} />
+                <span className="truncate font-mono">{r.name}</span>
+              </span>
+              <span className="tabular shrink-0 font-mono text-[11px] text-faint">{shortDate(r.pushed)}</span>
+            </a>
           </li>
         ))}
       </ul>
@@ -180,13 +209,9 @@ function CardHead({ eyebrow, logo, value, caption, href, icon, linkLabel }) {
   )
 }
 
-function GithubCard({ data, languages }) {
+function GithubCard({ data, repos }) {
   const stats = githubStats(data.days)
-  const bestDay = new Date(stats.best.date + 'T00:00:00Z').toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    timeZone: 'UTC',
-  })
+  const bestDay = shortDate(stats.best.date)
   return (
     <article className="glass flex h-full flex-col rounded-[22px] p-5 sm:p-6">
       <CardHead
@@ -209,7 +234,8 @@ function GithubCard({ data, languages }) {
       <div className="mb-5 mt-3 flex justify-end">
         <Legend />
       </div>
-      {languages?.list.length > 0 && <Languages data={languages} />}
+      {repos?.languages.list.length > 0 && <Languages data={repos.languages} />}
+      {repos?.recent.length > 0 && <RecentRepos repos={repos.recent} />}
       <div className="mt-auto grid grid-cols-3 gap-3 border-t border-[var(--color-line)] pt-5">
         <MiniStat value={stats.active} label="Days with commits" />
         <MiniStat value={`${stats.longest} days`} label="Longest streak" />
@@ -278,7 +304,7 @@ function LeetcodeCard({ data }) {
                   href={t.url}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="glass-chip glass-hover inline-flex items-center gap-2 rounded-lg px-2.5 py-1 text-xs text-ink-soft hover:text-ink"
+                  className="glass-chip glass-hover inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs sm:px-2.5 sm:py-1 text-ink-soft hover:text-ink"
                 >
                   {t.name}
                   <span className="tabular font-mono text-[11px] text-faint">{t.solved}</span>
@@ -299,7 +325,7 @@ function LeetcodeCard({ data }) {
                   href={p.url}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="glass-chip glass-hover inline-flex rounded-lg px-2.5 py-1 font-mono text-xs text-ink-soft hover:text-ink"
+                  className="glass-chip glass-hover inline-flex rounded-lg px-3 py-2 font-mono text-xs sm:px-2.5 sm:py-1 text-ink-soft hover:text-ink"
                 >
                   {p.title}
                 </a>
@@ -313,7 +339,7 @@ function LeetcodeCard({ data }) {
 }
 
 export default function Activity() {
-  const { github, languages, leetcode } = activity
+  const { github, repos, leetcode } = activity
   if (!github && !leetcode) return null
 
   return (
@@ -321,7 +347,7 @@ export default function Activity() {
       <div className="grid items-stretch gap-5 lg:grid-cols-2 lg:gap-6">
         {github && (
           <Reveal className="h-full">
-            <GithubCard data={github} languages={languages} />
+            <GithubCard data={github} repos={repos} />
           </Reveal>
         )}
         {leetcode && (

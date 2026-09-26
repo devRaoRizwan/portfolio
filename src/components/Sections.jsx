@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { profile, projects, work, toolbelt, aitools, background } from '../content'
 import activity from '../activity.json'
 import EmailButton from './EmailButton'
@@ -19,7 +20,43 @@ import {
 // Rounded down to the hundred so "1,400+" stays true between daily refreshes.
 const listings = Math.floor((activity.jobharvester?.listings ?? 1300) / 100) * 100
 
-function Shell({ children, className = '' }) {
+// Phones clamp long descriptions; the toggle appears only when text was cut.
+const CLAMP = { 3: 'line-clamp-3', 4: 'line-clamp-4' }
+
+function ClampText({ children, lines = 3, className = '' }) {
+  const ref = useRef(null)
+  const [open, setOpen] = useState(false)
+  const [clipped, setClipped] = useState(false)
+
+  useEffect(() => {
+    const node = ref.current
+    if (!node) return
+    const measure = () => setClipped(node.scrollHeight > node.clientHeight + 1)
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  return (
+    <>
+      <p ref={ref} className={`${open ? '' : CLAMP[lines]} sm:line-clamp-none ${className}`}>
+        {children}
+      </p>
+      {(clipped || open) && (
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          className="no-print mt-1.5 self-start py-1 text-[13px] font-medium text-ink underline decoration-[var(--color-line)] underline-offset-4 sm:hidden"
+        >
+          {open ? 'Show less' : 'Read more'}
+        </button>
+      )}
+    </>
+  )
+}
+
+export function Shell({ children, className = '' }) {
   return (
     <div className={`mx-auto w-full max-w-[1720px] px-4 sm:px-6 lg:px-8 ${className}`}>
       {children}
@@ -63,7 +100,7 @@ function Stat({ value, decimals = 0, suffix = '', label }) {
 
 export function Hero() {
   return (
-    <header id="top" className="pt-6 sm:pt-8">
+    <header id="top" className="pt-4 sm:pt-5">
       <Shell>
         <div className="grid items-stretch gap-5 lg:grid-cols-[1.75fr_1fr] lg:gap-6">
         <Reveal className="h-full">
@@ -84,7 +121,15 @@ export function Hero() {
                   </picture>
 
                   <div className="min-w-0">
-                    <p className="eyebrow mb-1.5 lg:mb-4">{profile.role}</p>
+                    <div className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5 lg:mb-4">
+                      <p className="eyebrow">{profile.role}</p>
+                      {profile.openTo && (
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-[#10b981]/30 bg-[#10b981]/10 px-2.5 py-0.5 text-[11px] font-medium text-[#047857]">
+                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#10b981]" />
+                          {profile.openTo}
+                        </span>
+                      )}
+                    </div>
                     <h1 className="text-[1.9rem] leading-[0.95] tracking-tight sm:text-[3rem] lg:text-[3.4rem]">
                       {profile.name}
                     </h1>
@@ -153,7 +198,7 @@ export function Hero() {
               <Stat value={100000} suffix="+" label="Requests a day in production" />
               <Stat value={2.3} decimals={1} suffix=" yrs" label="Shipping Python backends" />
               <Stat value={listings} suffix="+" label="Live listings on JobHarvester" />
-              <Stat value={18} label="Tools used in production" />
+              <Stat value={toolbelt.length} label="Tools used in production" />
             </div>
           </div>
         </Reveal>
@@ -199,6 +244,15 @@ function BackgroundPanel() {
             </li>
           ))}
         </ul>
+
+        {profile.location && (
+          <div className="mt-auto pt-5">
+            <div className="mb-5 h-px bg-[var(--color-line)]" />
+            <p className="eyebrow mb-2">Based in</p>
+            <p className="text-sm font-medium text-ink">{profile.location}</p>
+            <p className="mt-0.5 text-xs text-muted">{profile.availability}</p>
+          </div>
+        )}
       </div>
     </Reveal>
   )
@@ -246,9 +300,11 @@ function ProjectCard({ project, delay }) {
               <p className="mt-0.5 font-mono text-[13px] text-muted">{project.tagline}</p>
             </div>
           </div>
-          <p className="mt-3 line-clamp-3 text-[13px] leading-relaxed text-ink-soft sm:line-clamp-none sm:text-[14px]">
-            {project.description.replace('{listings}', listings.toLocaleString('en-US'))}
-          </p>
+          <div className="mt-3 flex flex-col">
+            <ClampText className="text-[13px] leading-relaxed text-ink-soft sm:text-[14px]">
+              {project.description.replace('{listings}', listings.toLocaleString('en-US'))}
+            </ClampText>
+          </div>
 
           <div className="mt-4 flex flex-wrap gap-1.5">
             {project.stack.map((tech) => (
@@ -304,7 +360,8 @@ export function Projects() {
 function RoleCard({ job, delay }) {
   return (
     <Reveal delay={delay} className="h-full">
-      <article className="glass glass-hover @container flex h-full flex-col rounded-[22px] p-5 sm:p-6">
+      <article className="glass glass-hover @container flex h-full flex-col rounded-[22px]">
+        <div className="flex flex-1 flex-col p-5 sm:p-6">
         <div className="flex items-start gap-4">
           <Logo src={job.logo} name={job.company} className="h-12 w-12" />
           <div className="min-w-0 flex-1">
@@ -318,9 +375,11 @@ function RoleCard({ job, delay }) {
           </div>
         </div>
 
-        <p className="mt-4 line-clamp-4 text-[13px] leading-relaxed text-ink-soft sm:line-clamp-none sm:text-[14px]">
-          {job.story}
-        </p>
+        <div className="mt-4 flex flex-col">
+          <ClampText lines={4} className="text-[13px] leading-relaxed text-ink-soft sm:text-[14px]">
+            {job.story}
+          </ClampText>
+        </div>
 
         <Diagram diagram={job.diagram} />
 
@@ -328,6 +387,7 @@ function RoleCard({ job, delay }) {
           {job.stack.map((tech) => (
             <Chip key={tech}>{tech}</Chip>
           ))}
+        </div>
         </div>
       </article>
     </Reveal>
@@ -392,20 +452,21 @@ export function Contact() {
             />
           </a>
 
-          <div className="no-print mt-7 flex flex-wrap items-center justify-center gap-2 sm:mt-9">
+          <div className="no-print mx-auto mt-7 grid max-w-md grid-cols-3 gap-2 sm:mt-9 sm:flex sm:max-w-none sm:items-center sm:justify-center">
             <a
               href={profile.resume}
               download
-              className="glass-chip glass-hover inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink"
+              className="glass-chip glass-hover inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-ink sm:px-4"
             >
               <IconDownload width={15} height={15} />
-              Download CV
+              <span className="sm:hidden">CV</span>
+              <span className="hidden sm:inline">Download CV</span>
             </a>
             <a
               href={profile.github}
               target="_blank"
               rel="noreferrer noopener"
-              className="glass-chip glass-hover inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink"
+              className="glass-chip glass-hover inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-ink sm:px-4"
             >
               <IconGithub width={15} height={15} />
               GitHub
@@ -414,7 +475,7 @@ export function Contact() {
               href={profile.linkedin}
               target="_blank"
               rel="noreferrer noopener"
-              className="glass-chip glass-hover inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink"
+              className="glass-chip glass-hover inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-ink sm:px-4"
             >
               <IconLinkedin width={15} height={15} />
               LinkedIn
@@ -423,5 +484,25 @@ export function Contact() {
         </div>
       </Reveal>
     </Section>
+  )
+}
+
+export function Footer() {
+  const { fetchedAt } = activity
+  const updated = new Date(fetchedAt).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+  return (
+    <footer className="pb-8 pt-2">
+      <Shell>
+        <div className="flex flex-col items-center justify-between gap-2 border-t border-[var(--color-line)] px-2 pt-6 text-center text-[12px] text-faint sm:flex-row sm:text-left">
+          <p>© {fetchedAt.slice(0, 4)} {profile.name}. Built with React and Vite.</p>
+          <p className="font-mono">Activity data updated {updated}</p>
+        </div>
+      </Shell>
+    </footer>
   )
 }

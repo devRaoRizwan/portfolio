@@ -144,28 +144,26 @@ export const IconArrow = (p) => (
 
 export function LogoGrid({ items }) {
   return (
-    <ul className="grid grid-cols-4 gap-1.5 @sm:gap-2 @md:grid-cols-5 @2xl:grid-cols-6">
+    <ul className="grid grid-cols-2 gap-1.5 @sm:grid-cols-3 @xl:grid-cols-4 @3xl:grid-cols-6 sm:gap-2">
       {items.map((item) => (
         <li key={item.name}>
-          <div className="glass glass-hover flex h-full flex-col items-center gap-2 rounded-xl px-1.5 py-3 sm:gap-2.5 sm:rounded-2xl sm:px-2 sm:py-5">
+          <div className="glass-chip glass-hover flex h-full items-center gap-2.5 rounded-xl px-3 py-2.5">
             {item.icon ? (
               <img
                 src={item.icon}
                 alt=""
-                width={28}
-                height={28}
+                width={20}
+                height={20}
                 loading="lazy"
                 decoding="async"
-                className="h-5 w-5 sm:h-7 sm:w-7"
+                className="h-5 w-5 shrink-0"
               />
             ) : (
-              <span className="flex h-5 items-center font-mono text-sm font-semibold text-ink sm:h-7 sm:text-base">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center font-mono text-[11px] font-semibold text-ink">
                 {item.name.slice(0, 2)}
               </span>
             )}
-            <span className="text-center text-[10px] leading-tight text-muted sm:text-[11px]">
-              {item.name}
-            </span>
+            <span className="truncate text-[13px] text-ink-soft">{item.name}</span>
           </div>
         </li>
       ))}

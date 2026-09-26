@@ -1,4 +1,4 @@
-// Pulls GitHub contributions and languages, LeetCode stats and the JobHarvester
+// Pulls GitHub contributions, languages and recent repos, LeetCode stats and the JobHarvester
 // listing count into src/activity.json so the site is prerendered with real numbers. Runs before dev and build.
 // A failed fetch keeps whatever snapshot is already on disk.
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
@@ -45,9 +45,7 @@ async function github() {
   }
 }
 
-// Weighted by repo rather than by bytes: a few large frontends would otherwise
-// outweigh the many Python repos that make up most of the work.
-async function languages() {
+async function repos() {
   const headers = { Accept: 'application/vnd.github+json' }
   if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`
   const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&type=owner`, {
@@ -55,15 +53,30 @@ async function languages() {
     signal: AbortSignal.timeout(15000),
   })
   if (!res.ok) throw new Error(`GitHub API responded ${res.status}`)
-  const repos = (await res.json()).filter((r) => !r.fork && r.language)
+  const owned = (await res.json()).filter((r) => !r.fork && r.name !== GITHUB_USER)
 
+  // Weighted by repo rather than by bytes: a few large frontends would otherwise
+  // outweigh the many Python repos that make up most of the work.
+  const coded = owned.filter((r) => r.language)
   const counts = {}
-  for (const r of repos) counts[r.language] = (counts[r.language] ?? 0) + 1
+  for (const r of coded) counts[r.language] = (counts[r.language] ?? 0) + 1
+
   return {
-    repos: repos.length,
-    list: Object.entries(counts)
-      .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name)),
+    languages: {
+      repos: coded.length,
+      list: Object.entries(counts)
+        .map(([name, count]) => ({ name, count }))
+        .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name)),
+    },
+    recent: owned
+      .sort((a, b) => b.pushed_at.localeCompare(a.pushed_at))
+      .slice(0, 3)
+      .map((r) => ({
+        name: r.name,
+        url: r.html_url,
+        language: r.language,
+        pushed: r.pushed_at.slice(0, 10),
+      })),
   }
 }
 
@@ -137,7 +150,7 @@ async function leetcode() {
   }
 }
 
-const sources = { github, languages, leetcode, jobharvester }
+const sources = { github, repos, leetcode, jobharvester }
 const results = await Promise.allSettled(Object.values(sources).map((fetchOne) => fetchOne()))
 
 const activity = { fetchedAt: new Date().toISOString() }
@@ -153,7 +166,7 @@ Object.keys(sources).forEach((name, i) => {
 writeFileSync(OUT, JSON.stringify(activity) + '\n')
 console.log(
   `[activity] GitHub ${activity.github?.total ?? '-'} contributions, ` +
-    `top language ${activity.languages?.list[0]?.name ?? '-'}, ` +
+    `top language ${activity.repos?.languages.list[0]?.name ?? '-'}, ` +
     `LeetCode ${activity.leetcode?.solved.all ?? '-'} solved, ` +
     `JobHarvester ${activity.jobharvester?.listings ?? '-'} listings`
 )

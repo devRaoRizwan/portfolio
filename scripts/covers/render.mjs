@@ -1,5 +1,5 @@
 // Renders every project cover from one template so the Projects grid reads as
-// a set. Output is 1400x612 (the card's 16:7 frame); everything that matters
+// a set, plus the site's social preview (og.png) in the same fonts. Output is 1400x612 (the card's 16:7 frame); everything that matters
 // sits in the top 500px because phones crop the card to 16:6 from the top.
 //
 // Run: npm i --no-save playwright && node scripts/covers/render.mjs
@@ -85,14 +85,12 @@ const page = (c) => {
     background-size: 48px 48px;
     mask-image: linear-gradient(to bottom, #000 40%, transparent 100%);
   }
-  .wrap { position: absolute; inset: 56px 80px auto 80px; }
-  .brand { display: flex; align-items: center; gap: 16px; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
-  .tile { width: 60px; height: 60px; border-radius: 16px; overflow: hidden; }
-  .tile img, .hero img { width: 100%; height: 100%; display: block; }
-  h1 { margin-top: 36px; font-size: 66px; line-height: 1.04; font-weight: 700; letter-spacing: -0.035em; max-width: 780px; }
+  .wrap { position: absolute; inset: 88px 80px auto 80px; }
+  .hero img { width: 100%; height: 100%; display: block; }
+  h1 { font-size: 66px; line-height: 1.04; font-weight: 700; letter-spacing: -0.035em; max-width: 780px; }
   h1 em { font-style: normal; color: ${c.accent}; }
   p { margin-top: 26px; max-width: 640px; font-size: 22px; line-height: 1.45; color: rgba(255,255,255,0.7); }
-  .foot { position: absolute; left: 80px; right: 80px; top: 466px; display: flex; align-items: center; justify-content: space-between; }
+  .foot { position: absolute; left: 80px; right: 80px; top: 440px; display: flex; align-items: center; justify-content: space-between; }
   .chips { display: flex; gap: 12px; }
   .chip {
     font-size: 18px; font-weight: 600; color: ${c.accent};
@@ -101,13 +99,12 @@ const page = (c) => {
   }
   .domain { font-family: Mono, monospace; font-size: 20px; font-weight: 500; color: rgba(255,255,255,0.85); }
   .hero {
-    position: absolute; right: 120px; top: 92px; width: 270px; height: 270px;
+    position: absolute; right: 120px; top: 100px; width: 270px; height: 270px;
     border-radius: 64px; overflow: hidden;
     box-shadow: 0 30px 80px -20px ${c.glow}, 0 0 0 1px rgba(255,255,255,0.08);
   }
   </style></head><body>
   <div class="wrap">
-    <div class="brand"><span class="tile"><img src="${logo}"></span>${c.name}</div>
     <h1>${c.headline.join('<br>')}</h1>
     <p>${c.sub}</p>
   </div>
@@ -140,4 +137,56 @@ for (const c of covers) {
   writeFileSync(resolve(OUT, `${c.slug}.webp`), Buffer.from(webp, 'base64'))
   console.log(`[covers] ${c.slug}.webp`)
 }
+
+// Social preview: the light look of the site itself, 1200x630 PNG.
+const { profile } = await import('../../src/content.js')
+const photo = dataUri('public/images/rao.webp')
+const og = `<!doctype html><html><head><style>
+  @font-face { font-family: Inter; font-weight: 400 700; src: url(${inter}) format('woff2'); }
+  @font-face { font-family: Mono; font-weight: 400 500; src: url(${mono}) format('woff2'); }
+  * { margin: 0; box-sizing: border-box; }
+  body {
+    width: 1200px; height: 630px; overflow: hidden; position: relative;
+    font-family: Inter, sans-serif; color: #0a0a0a;
+    background:
+      radial-gradient(640px 480px at 10% 0%, #c9c9d1, transparent 70%),
+      radial-gradient(560px 460px at 100% 30%, #bcbcc6, transparent 70%),
+      radial-gradient(600px 400px at 40% 110%, #d6d6de, transparent 70%),
+      #f4f4f7;
+  }
+  .wrap { position: absolute; left: 84px; top: 150px; width: 640px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border-radius: 999px;
+    font-size: 20px; font-weight: 600; color: #047857; background: #10b98122; border: 1px solid #10b9814d;
+  }
+  .pill i { width: 10px; height: 10px; border-radius: 50%; background: #10b981; }
+  h1 { margin-top: 26px; font-size: 92px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
+  .role { margin-top: 18px; font-family: Mono, monospace; font-size: 28px; color: #565656; }
+  .stack { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .stack span {
+    font-family: Mono, monospace; font-size: 20px; color: #3a3a3a; padding: 8px 14px; border-radius: 12px;
+    background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 1px 2px rgba(10,10,10,0.06);
+  }
+  .domain { position: absolute; left: 84px; bottom: 64px; font-family: Mono, monospace; font-size: 22px; font-weight: 500; }
+  .photo {
+    position: absolute; right: 96px; top: 150px; width: 320px; height: 320px; border-radius: 50%; overflow: hidden;
+    border: 6px solid rgba(255,255,255,0.9); box-shadow: 0 30px 60px -20px rgba(10,10,10,0.35);
+  }
+  .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  </style></head><body>
+  <div class="wrap">
+    <span class="pill"><i></i>${profile.openTo}</span>
+    <h1>${profile.name}</h1>
+    <p class="role">${profile.role}</p>
+    <div class="stack">${profile.coreStack.map((t) => `<span>${t}</span>`).join('')}</div>
+  </div>
+  <div class="photo"><img src="${photo}"></div>
+  <span class="domain">devraorizwan.online</span>
+  </body></html>`
+const ogTab = await browser.newPage({ viewport: { width: 1200, height: 630 } })
+await ogTab.setContent(og, { waitUntil: 'load' })
+await ogTab.evaluate(() => document.fonts.ready)
+await ogTab.screenshot({ path: resolve('public/images/og.png'), type: 'png' })
+console.log('[covers] og.png')
+
 await browser.close()
