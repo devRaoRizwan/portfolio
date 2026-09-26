@@ -558,23 +558,3 @@ export function Contact() {
     </Section>
   )
 }
-
-export function Footer() {
-  const { fetchedAt } = activity
-  const updated = new Date(fetchedAt).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    timeZone: 'UTC',
-  })
-  return (
-    <footer className="pb-8 pt-2">
-      <Shell>
-        <div className="flex flex-col items-center justify-between gap-2 border-t border-[var(--color-line)] px-2 pt-6 text-center text-[12px] text-faint sm:flex-row sm:text-left">
-          <p>© {fetchedAt.slice(0, 4)} {profile.name}. Built with React and Vite.</p>
-          <p className="font-mono">Activity data updated {updated}</p>
-        </div>
-      </Shell>
-    </footer>
-  )
-}
