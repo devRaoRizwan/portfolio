@@ -3,9 +3,10 @@ import { profile } from '../content'
 import { Shell } from './Sections'
 import { IconMail, gmailWebUrl, openGmail } from './ui'
 
+// `short` is the label phones use, so every link fits without scrolling.
 const LINKS = [
   { id: 'projects', label: 'Projects' },
-  { id: 'work', label: 'Experience' },
+  { id: 'work', label: 'Experience', short: 'Exp' },
   { id: 'activity', label: 'Activity' },
   { id: 'stack', label: 'Tools' },
   { id: 'contact', label: 'Contact' },
@@ -43,24 +44,32 @@ export default function Header({ base = '' }) {
       <Shell>
         <nav
           aria-label="Sections"
-          className="glass flex items-center gap-2 rounded-2xl py-1.5 pl-1.5 pr-1.5 sm:pl-4"
+          className="glass flex items-center gap-1 rounded-2xl py-1.5 pl-1.5 pr-1.5 sm:gap-2 sm:pl-4"
         >
           <a href={base ? '/' : '#top'} className="hidden shrink-0 text-[15px] font-semibold tracking-tight text-ink sm:block">
             {profile.name}
           </a>
 
-          <ul className="-my-1 mr-auto flex min-w-0 items-center overflow-x-auto py-1 [mask-image:linear-gradient(to_right,#000_82%,transparent)] [scrollbar-width:none] sm:ml-6 sm:[mask-image:none]">
+          <ul className="flex min-w-0 flex-1 items-center justify-between sm:ml-6 sm:mr-auto sm:flex-none sm:justify-start">
             {LINKS.map((l) => (
-              <li key={l.id} className="shrink-0">
+              <li key={l.id}>
                 <a
                   href={`${base}#${l.id}`}
                   onClick={() => !base && flash(l.id)}
                   aria-current={active === l.id ? 'true' : undefined}
-                  className={`block rounded-lg px-2.5 py-2 text-[13px] transition-colors ${
+                  aria-label={l.short ? l.label : undefined}
+                  className={`block whitespace-nowrap rounded-lg px-1.5 py-2 text-[12.5px] transition-colors max-[359px]:px-1 max-[359px]:text-[11.5px] min-[400px]:px-2.5 sm:text-[13px] ${
                     active === l.id ? 'glass-chip font-medium text-ink' : 'text-muted hover:text-ink'
                   }`}
                 >
-                  {l.label}
+                  {l.short ? (
+                    <>
+                      <span className="sm:hidden">{l.short}</span>
+                      <span className="hidden sm:inline">{l.label}</span>
+                    </>
+                  ) : (
+                    l.label
+                  )}
                 </a>
               </li>
             ))}
