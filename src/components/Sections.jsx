@@ -1,4 +1,5 @@
 import { profile, projects, work, toolbelt, aitools, background } from '../content'
+import activity from '../activity.json'
 import EmailButton from './EmailButton'
 import Diagram from './Diagram'
 import {
@@ -14,6 +15,9 @@ import {
   IconDownload,
   IconArrow,
 } from './ui'
+
+// Rounded down to the hundred so "1,400+" stays true between daily refreshes.
+const listings = Math.floor((activity.jobharvester?.listings ?? 1300) / 100) * 100
 
 function Shell({ children, className = '' }) {
   return (
@@ -148,7 +152,7 @@ export function Hero() {
             <div className="mt-7 grid grid-cols-2 gap-5 border-t border-[var(--color-line)] pt-6 sm:grid-cols-4">
               <Stat value={100000} suffix="+" label="Requests a day in production" />
               <Stat value={2.3} decimals={1} suffix=" yrs" label="Shipping Python backends" />
-              <Stat value={1300} suffix="+" label="Live listings on JobHarvester" />
+              <Stat value={listings} suffix="+" label="Live listings on JobHarvester" />
               <Stat value={18} label="Tools used in production" />
             </div>
           </div>
@@ -238,7 +242,7 @@ function ProjectCard({ project, delay }) {
           </div>
           <p className="mt-1 font-mono text-[13px] text-muted">{project.tagline}</p>
           <p className="mt-3 line-clamp-3 text-[13px] leading-relaxed text-ink-soft sm:line-clamp-none sm:text-[14px]">
-            {project.description}
+            {project.description.replace('{listings}', listings.toLocaleString('en-US'))}
           </p>
 
           <div className="mt-4 flex flex-wrap gap-1.5">

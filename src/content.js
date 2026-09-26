@@ -133,7 +133,7 @@ export const projects = [
     },
     description: `Crawlers pull postings from Lahore technology companies on a
       schedule, a Django REST API normalises them into Postgres, and a React
-      frontend makes them searchable. Over 1,300 live listings right now.`,
+      frontend makes them searchable. Over {listings} live listings right now.`,
     diagram: {
       caption: 'How a posting reaches the page',
       kind: 'flow',

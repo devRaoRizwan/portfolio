@@ -98,6 +98,41 @@ function githubStats(days) {
   }
 }
 
+// GitHub's own linguist colours, so the bar reads like the one on a repo page.
+const LANGUAGE_COLORS = {
+  Python: '#3572A5',
+  JavaScript: '#f1e05a',
+  TypeScript: '#3178c6',
+  CSS: '#563d7c',
+  HTML: '#e34c26',
+  Shell: '#89e051',
+  Dockerfile: '#384d54',
+  'Jupyter Notebook': '#DA5B0B',
+}
+const languageColor = (name) => LANGUAGE_COLORS[name] ?? '#8b8b8b'
+
+function Languages({ data }) {
+  return (
+    <div className="mb-5">
+      <p className="eyebrow mb-2.5">Top languages</p>
+      <div className="flex h-2 gap-0.5 overflow-hidden rounded-full" aria-hidden>
+        {data.list.map((l) => (
+          <span key={l.name} style={{ width: `${(l.count / data.repos) * 100}%`, background: languageColor(l.name) }} />
+        ))}
+      </div>
+      <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
+        {data.list.map((l) => (
+          <li key={l.name} className="flex items-center gap-1.5 text-[12px] text-muted">
+            <span className="h-2 w-2 rounded-full" style={{ background: languageColor(l.name) }} />
+            <span className="font-medium text-ink">{l.name}</span>
+            {l.count} {l.count === 1 ? 'repo' : 'repos'}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 function MiniStat({ value, label }) {
   return (
     <div>
@@ -145,7 +180,7 @@ function CardHead({ eyebrow, logo, value, caption, href, icon, linkLabel }) {
   )
 }
 
-function GithubCard({ data }) {
+function GithubCard({ data, languages }) {
   const stats = githubStats(data.days)
   const bestDay = new Date(stats.best.date + 'T00:00:00Z').toLocaleDateString('en-US', {
     month: 'short',
@@ -174,6 +209,7 @@ function GithubCard({ data }) {
       <div className="mb-5 mt-3 flex justify-end">
         <Legend />
       </div>
+      {languages?.list.length > 0 && <Languages data={languages} />}
       <div className="mt-auto grid grid-cols-3 gap-3 border-t border-[var(--color-line)] pt-5">
         <MiniStat value={stats.active} label="Days with commits" />
         <MiniStat value={`${stats.longest} days`} label="Longest streak" />
@@ -232,6 +268,27 @@ function LeetcodeCard({ data }) {
         />
       </div>
 
+      {data.topics?.length > 0 && (
+        <>
+          <p className="eyebrow mb-2.5 mt-5">Topic skills</p>
+          <ul className="flex flex-wrap gap-1.5">
+            {data.topics.slice(0, 8).map((t) => (
+              <li key={t.url}>
+                <a
+                  href={t.url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="glass-chip glass-hover inline-flex items-center gap-2 rounded-lg px-2.5 py-1 text-xs text-ink-soft hover:text-ink"
+                >
+                  {t.name}
+                  <span className="tabular font-mono text-[11px] text-faint">{t.solved}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
       {data.recent.length > 0 && (
         <>
           <p className="eyebrow mb-2.5 mt-5">Recently solved</p>
@@ -256,7 +313,7 @@ function LeetcodeCard({ data }) {
 }
 
 export default function Activity() {
-  const { github, leetcode } = activity
+  const { github, languages, leetcode } = activity
   if (!github && !leetcode) return null
 
   return (
@@ -264,7 +321,7 @@ export default function Activity() {
       <div className="grid items-stretch gap-5 lg:grid-cols-2 lg:gap-6">
         {github && (
           <Reveal className="h-full">
-            <GithubCard data={github} />
+            <GithubCard data={github} languages={languages} />
           </Reveal>
         )}
         {leetcode && (
