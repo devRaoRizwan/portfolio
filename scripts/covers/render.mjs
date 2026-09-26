@@ -154,13 +154,8 @@ const og = `<!doctype html><html><head><style>
       radial-gradient(600px 400px at 40% 110%, #d6d6de, transparent 70%),
       #f4f4f7;
   }
-  .wrap { position: absolute; left: 84px; top: 150px; width: 640px; }
-  .pill {
-    display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border-radius: 999px;
-    font-size: 20px; font-weight: 600; color: #047857; background: #10b98122; border: 1px solid #10b9814d;
-  }
-  .pill i { width: 10px; height: 10px; border-radius: 50%; background: #10b981; }
-  h1 { margin-top: 26px; font-size: 92px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
+  .wrap { position: absolute; left: 84px; top: 170px; width: 640px; }
+  h1 { font-size: 92px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
   .role { margin-top: 18px; font-family: Mono, monospace; font-size: 28px; color: #565656; }
   .stack { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 10px; }
   .stack span {
@@ -175,7 +170,6 @@ const og = `<!doctype html><html><head><style>
   .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   </style></head><body>
   <div class="wrap">
-    <span class="pill"><i></i>${profile.openTo}</span>
     <h1>${profile.name}</h1>
     <p class="role">${profile.role}</p>
     <div class="stack">${profile.coreStack.map((t) => `<span>${t}</span>`).join('')}</div>

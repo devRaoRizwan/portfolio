@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { Hero, Projects, Experience, Tools, Contact } from './components/Sections'
 import Header from './components/Header'
 import Activity from './components/Activity'
+import AvailabilityToast from './components/AvailabilityToast'
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         <Contact />
       </main>
 
+      <AvailabilityToast />
       <Analytics />
     </>
   )

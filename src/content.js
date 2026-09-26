@@ -18,7 +18,7 @@ export const profile = {
 
   openTo: 'Open to backend roles',
   location: 'Lahore, Pakistan',
-  availability: 'Open to remote, or on site in Lahore',
+  availability: 'Remote, or on site in Lahore',
 
   photo: '/images/rao.webp',
   photoFallback: '/images/rao.png',

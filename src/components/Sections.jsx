@@ -124,15 +124,7 @@ export function Hero() {
                   </picture>
 
                   <div className="min-w-0">
-                    <div className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5 lg:mb-4">
-                      <p className="eyebrow">{profile.role}</p>
-                      {profile.openTo && (
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-[#10b981]/30 bg-[#10b981]/10 px-2.5 py-0.5 text-[11px] font-medium text-[#047857]">
-                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#10b981]" />
-                          {profile.openTo}
-                        </span>
-                      )}
-                    </div>
+                    <p className="eyebrow mb-1.5 lg:mb-4">{profile.role}</p>
                     <h1 className="text-[1.9rem] leading-[0.95] tracking-tight sm:text-[3rem] lg:text-[3.4rem]">
                       {profile.name}
                     </h1>
@@ -492,16 +484,7 @@ export function Contact() {
           />
           <div className="relative grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-14">
             <div>
-              {profile.openTo && (
-                <span className="inline-flex items-center gap-2 rounded-full border border-[#10b981]/30 bg-[#10b981]/10 px-3 py-1 text-[12px] font-medium text-[#6ee7b7]">
-                  <span aria-hidden className="relative flex h-1.5 w-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#10b981] opacity-70" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#10b981]" />
-                  </span>
-                  {profile.openTo}
-                </span>
-              )}
-              <h3 className="mt-5 text-[1.9rem] font-semibold leading-[1.05] tracking-tight text-white sm:text-[2.6rem]">
+              <h3 className="text-[1.9rem] font-semibold leading-[1.05] tracking-tight text-white sm:text-[2.6rem]">
                 Need a backend that holds up under load?
               </h3>
               <p className="mt-4 max-w-md text-[15px] leading-relaxed text-white/65">
