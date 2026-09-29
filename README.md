@@ -7,6 +7,7 @@ Django, REST APIs, Celery, PostgreSQL, and cloud infrastructure.
 
 ## Built With
 
+
 - React 18
 - Vite 6
 - Tailwind CSS v4
