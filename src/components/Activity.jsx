@@ -13,11 +13,26 @@ const leetcodeLevel = (n) => (n === 0 ? 0 : n <= 2 ? 1 : n <= 4 ? 2 : n <= 7 ? 3
 
 // Dates are derived from the snapshot, not the clock, so the prerendered
 // markup and the hydrated markup always agree.
+const END = new Date(activity.fetchedAt.slice(0, 10) + 'T00:00:00Z')
+
+function windowStart(weeksShown) {
+  const start = new Date(END)
+  start.setUTCDate(start.getUTCDate() - END.getUTCDay() - (weeksShown - 1) * 7)
+  return start
+}
+
+// Totals cover exactly the cells the full-width grid draws.
+function yearStats(days) {
+  const from = windowStart(WEEKS).toISOString().slice(0, 10)
+  const to = END.toISOString().slice(0, 10)
+  const inWindow = days.filter((d) => d.date >= from && d.date <= to && d.count > 0)
+  return { total: inWindow.reduce((sum, d) => sum + d.count, 0), activeDays: inWindow.length }
+}
+
 function buildWeeks(days, levelOf, weeksShown) {
   const byDate = new Map(days.map((d) => [d.date, d]))
-  const end = new Date(activity.fetchedAt.slice(0, 10) + 'T00:00:00Z')
-  const start = new Date(end)
-  start.setUTCDate(start.getUTCDate() - end.getUTCDay() - (weeksShown - 1) * 7)
+  const end = END
+  const start = windowStart(weeksShown)
 
   const weeks = []
   for (let w = 0; w < weeksShown; w++) {
@@ -92,7 +107,8 @@ function Legend() {
   )
 }
 
-function HeatmapCard({ name, handle, logo, url, icon, days, levelOf }) {
+function HeatmapCard({ name, handle, logo, url, icon, days, levelOf, unit }) {
+  const { total, activeDays } = yearStats(days)
   return (
     <article className="glass flex h-full flex-col rounded-[22px] p-5 sm:p-6">
       <div className="flex items-center justify-between gap-4">
@@ -116,7 +132,13 @@ function HeatmapCard({ name, handle, logo, url, icon, days, levelOf }) {
       <div className="glass-inset mt-5 rounded-2xl p-3 sm:p-4">
         <Heatmap days={days} levelOf={levelOf} label={`${name} activity over the last year`} />
       </div>
-      <div className="mt-3 flex justify-end">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <p className="font-mono text-[12px] text-muted">
+          <span className="font-semibold text-ink">{total.toLocaleString('en-US')}</span> {unit}
+          {total === 1 ? '' : 's'} · <span className="font-semibold text-ink">{activeDays}</span> active day
+          {activeDays === 1 ? '' : 's'}{' '}
+          in the last year
+        </p>
         <Legend />
       </div>
     </article>
@@ -140,6 +162,7 @@ export default function Activity() {
               icon={<IconGithub width={15} height={15} />}
               days={github.days}
               levelOf={(day) => day?.level ?? 0}
+              unit="contribution"
             />
           </Reveal>
         )}
@@ -153,6 +176,7 @@ export default function Activity() {
               icon={<IconCode width={15} height={15} />}
               days={leetcode.days}
               levelOf={(_, count) => leetcodeLevel(count)}
+              unit="submission"
             />
           </Reveal>
         )}
