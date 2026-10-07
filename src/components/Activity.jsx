@@ -145,13 +145,19 @@ function HeatmapCard({ name, handle, logo, url, icon, days, levelOf, unit }) {
   )
 }
 
+// A near-empty calendar reads as abandoned, so LeetCode waits for some history.
+const LEETCODE_MIN_ACTIVE_DAYS = 30
+
 export default function Activity() {
-  const { github, leetcode } = activity
+  const { github } = activity
+  const leetcode = activity.leetcode && yearStats(activity.leetcode.days).activeDays >= LEETCODE_MIN_ACTIVE_DAYS
+    ? activity.leetcode
+    : null
   if (!github && !leetcode) return null
 
   return (
     <Section id="activity" title="Activity">
-      <div className="grid items-stretch gap-5 lg:grid-cols-2 lg:gap-6">
+      <div className={`grid items-stretch gap-5 lg:gap-6 ${github && leetcode ? 'lg:grid-cols-2' : 'mx-auto max-w-[900px]'}`}>
         {github && (
           <Reveal className="h-full">
             <HeatmapCard

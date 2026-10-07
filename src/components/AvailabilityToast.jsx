@@ -22,7 +22,8 @@ const rememberDismissed = () => {
 }
 
 // A small note that slides in after a few seconds and steps aside while the
-// Contact section, which says the same thing, is on screen.
+// Contact section, which says the same thing, is on screen. Phones skip it:
+// it would cover the content and the header already has an Email button.
 export default function AvailabilityToast() {
   const [ready, setReady] = useState(false)
   const [dismissed, setDismissed] = useState(false)
@@ -55,7 +56,7 @@ export default function AvailabilityToast() {
     <div
       role="status"
       aria-hidden={!visible}
-      className={`no-print fixed inset-x-3 bottom-3 z-50 transition duration-500 ease-out sm:inset-x-auto sm:bottom-5 sm:right-5 sm:w-[340px] ${
+      className={`no-print fixed bottom-5 right-5 z-50 hidden w-[340px] transition duration-500 ease-out sm:block ${
         visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'
       }`}
     >

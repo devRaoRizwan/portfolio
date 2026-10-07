@@ -16,3 +16,15 @@ if (root.hasChildNodes()) {
 } else {
   createRoot(root).render(tree)
 }
+
+// Marks the page while it scrolls so the background mesh can pause (see index.css).
+let scrollTimer
+window.addEventListener(
+  'scroll',
+  () => {
+    document.documentElement.classList.add('scrolling')
+    clearTimeout(scrollTimer)
+    scrollTimer = setTimeout(() => document.documentElement.classList.remove('scrolling'), 150)
+  },
+  { passive: true }
+)

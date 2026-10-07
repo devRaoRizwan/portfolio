@@ -23,6 +23,8 @@ import {
 // Rounded down to the hundred so "1,400+" stays true between daily refreshes.
 const listings = Math.floor((activity.jobharvester?.listings ?? 1300) / 100) * 100
 
+const liveProjects = projects.filter((p) => p.links.live).length
+
 // Phones clamp long descriptions; the toggle appears only when text was cut.
 const CLAMP = { 3: 'line-clamp-3', 4: 'line-clamp-4' }
 
@@ -134,7 +136,7 @@ export function Hero() {
                     </h1>
                   </div>
                 </div>
-                <p className="mt-4 max-w-2xl text-[13.5px] leading-relaxed text-ink-soft sm:text-[15px]">
+                <p className="mt-4 max-w-2xl text-[14.5px] leading-relaxed text-ink-soft sm:text-[15px]">
                   {profile.bio}
                 </p>
 
@@ -197,12 +199,14 @@ export function Hero() {
               <Stat value={100000} suffix="+" label="Requests a day in production" />
               <Stat value={2.3} decimals={1} suffix=" yrs" label="Shipping Python backends" />
               <Stat value={listings} suffix="+" label="Listings collected by JobHarvester" />
-              <Stat value={toolbelt.length} label="Tools used in production" />
+              <Stat value={liveProjects} label="Projects live right now" />
             </div>
           </div>
         </div>
 
-        <BackgroundPanel />
+        <div className="hidden lg:block">
+          <BackgroundPanel />
+        </div>
         </div>
       </Shell>
     </header>
@@ -212,7 +216,7 @@ export function Hero() {
 function BackgroundPanel() {
   const { education, community } = background
   return (
-    <div className="h-full" id="education">
+    <div className="h-full">
       <div className="glass flex h-full flex-col rounded-[26px] p-6 sm:p-7">
         <div className="section-head -mx-1 mb-5 flex items-baseline gap-3 border-b border-[var(--color-line)] px-1 pb-4">
           <h2 className="text-[1.3rem] leading-none tracking-tight">Background</h2>
@@ -302,7 +306,7 @@ function ProjectCard({ project, delay, eager = false }) {
             </div>
           </div>
           <div className="mt-3 flex flex-col">
-            <ClampText className="text-[13px] leading-relaxed text-ink-soft sm:text-[14px]">
+            <ClampText className="text-[14px] leading-relaxed text-ink-soft">
               {project.description.replace('{listings}', listings.toLocaleString('en-US'))}
             </ClampText>
           </div>
@@ -370,14 +374,14 @@ function RoleCard({ job, delay }) {
               <h3 className="text-lg font-semibold leading-tight text-ink sm:text-xl">
                 {job.company}
               </h3>
-              <p className="font-mono text-[11px] text-faint">{job.period}</p>
+              <p className="font-mono text-[12px] text-faint">{job.period}</p>
             </div>
             <p className="mt-0.5 font-mono text-[13px] text-muted">{job.role}</p>
           </div>
         </div>
 
         <div className="mt-4 flex flex-col">
-          <ClampText lines={4} className="text-[13px] leading-relaxed text-ink-soft sm:text-[14px]">
+          <ClampText lines={4} className="text-[14px] leading-relaxed text-ink-soft">
             {job.story}
           </ClampText>
         </div>
@@ -403,6 +407,10 @@ export function Experience() {
           <RoleCard key={job.company} job={job} delay={i * 80} />
         ))}
       </div>
+      {/* Phones reach projects first, so the background panel waits until here. */}
+      <Reveal className="mt-5 lg:hidden">
+        <BackgroundPanel />
+      </Reveal>
     </Section>
   )
 }

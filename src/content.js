@@ -3,10 +3,9 @@ export const profile = {
   role: 'Backend Engineer',
   coreStack: ['Python', 'Django', 'DRF', 'PostgreSQL', 'Celery', 'AWS'],
 
-  bio: `Two years on the half of a product nobody sees. Django REST APIs at a
-    hundred thousand requests a day, Celery and RabbitMQ keeping slow work off
-    the request path, and CI/CD that stops a release when a scan finds
-    something.`,
+  bio: `Two years on the half of a product nobody sees. Django REST APIs in
+    production, Celery and RabbitMQ keeping slow work off the request path, and
+    CI/CD that stops a release when a scan finds something.`,
 
   email: 'dev.raorizwan@gmail.com',
   phone: '+92 323 454 4880',
@@ -70,7 +69,7 @@ export const work = [
         {
           label: 'Request path, answers immediately',
           nodes: [
-            { icon: 'ui:user', label: 'Client', sub: '100k+ per day' },
+            { icon: 'ui:user', label: 'Client', sub: 'Sends a request' },
             { icon: 'ui:server', label: 'DRF API', sub: 'Validate, enqueue' },
             { icon: 'ui:bolt', label: 'Response', sub: 'Returns at once' },
           ],
