@@ -21,8 +21,7 @@ function flash(id) {
   head.classList.add('flash')
 }
 
-// Off the home page, section links point back at it instead of in-page anchors.
-export default function Header({ base = '' }) {
+export default function Header() {
   const [active, setActive] = useState(null)
 
   useEffect(() => {
@@ -46,7 +45,7 @@ export default function Header({ base = '' }) {
           aria-label="Sections"
           className="glass flex items-center gap-1 rounded-2xl py-1.5 pl-1.5 pr-1.5 sm:gap-2 sm:pl-4"
         >
-          <a href={base ? '/' : '#top'} className="hidden shrink-0 text-[15px] font-semibold tracking-tight text-ink sm:block">
+          <a href="#top" className="hidden shrink-0 text-[15px] font-semibold tracking-tight text-ink sm:block">
             {profile.name}
           </a>
 
@@ -54,8 +53,8 @@ export default function Header({ base = '' }) {
             {LINKS.map((l) => (
               <li key={l.id}>
                 <a
-                  href={`${base}#${l.id}`}
-                  onClick={() => !base && flash(l.id)}
+                  href={`#${l.id}`}
+                  onClick={() => flash(l.id)}
                   aria-current={active === l.id ? 'true' : undefined}
                   aria-label={l.short ? l.label : undefined}
                   className={`block whitespace-nowrap rounded-lg px-1.5 py-2 text-[12.5px] transition-colors max-[359px]:px-1 max-[359px]:text-[11.5px] min-[400px]:px-2.5 sm:text-[13px] ${

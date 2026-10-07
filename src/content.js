@@ -95,7 +95,6 @@ export const projects = [
   {
     name: 'BOMWatcher',
     logo: '/logos/projects/bomwatcher.svg',
-    caseStudy: '/projects/bomwatcher',
     tagline: 'An AI bill of materials for your GitHub repos',
     cover: {
       image: '/images/covers/bomwatcher.webp',
@@ -143,7 +142,6 @@ export const projects = [
   {
     name: 'SiteScopia',
     logo: '/logos/projects/sitescopia.svg',
-    caseStudy: '/projects/sitescopia',
     tagline: 'Evidence-led website analysis',
     cover: {
       image: '/images/covers/sitescopia.webp',
@@ -180,7 +178,6 @@ export const projects = [
   {
     name: 'JobHarvester',
     logo: '/logos/projects/jobharvester.webp',
-    caseStudy: '/projects/jobharvester',
     tagline: 'Job aggregation for the Pakistani tech market',
     cover: {
       image: '/images/covers/jobharvester.webp',

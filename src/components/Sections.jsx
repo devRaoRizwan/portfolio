@@ -316,15 +316,6 @@ function ProjectCard({ project, delay, eager = false }) {
           {project.diagram && <Diagram diagram={project.diagram} />}
 
           <div className="no-print mt-auto flex flex-wrap items-center gap-2 pt-6">
-            {project.caseStudy && (
-              <a
-                href={project.caseStudy}
-                className="glass-chip glass-hover inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink"
-              >
-                Case study
-                <IconArrow width={15} height={15} />
-              </a>
-            )}
             {project.links.live && (
               <a
                 href={project.links.live}
