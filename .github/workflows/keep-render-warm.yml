@@ -1,0 +1,56 @@
+# Keeps the Render backends awake during working hours so a visitor never
+# waits on a cold start. Render's free plan sleeps a service after 15 minutes
+# without traffic.
+#
+# Budget: the free plan gives 750 instance hours a month per workspace, shared
+# by every service in it. Three services awake around the clock would need
+# about 2,230, so they are only kept warm Mon to Fri, 04:00 to 13:00 UTC
+# (09:00 to 18:00 in Lahore):
+#
+#   3 services x 9.25 h (window plus the 15 minute tail) x 23 weekdays = 638 h
+#
+# That leaves about 110 hours for real visits outside the window. Widening the
+# window or adding a service means redoing this sum first.
+name: Keep Render warm
+
+on:
+  schedule:
+    # Every 5 minutes, off the top of the hour, where GitHub's queue is busiest.
+    # A run can still be late, so the interval stays well under Render's 15.
+    - cron: '2-59/5 4-12 * * 1-5'
+  workflow_dispatch:
+
+concurrency:
+  group: keep-render-warm
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping every backend
+        run: |
+          urls=(
+            "https://sitescopia.onrender.com/api/health"
+            "https://jobharvester-backend-3bto.onrender.com/admin/login/?next=/admin/login"
+            "https://bomwatcher-api.onrender.com/api/v1/health"
+          )
+
+          # In parallel, so one slow cold start does not hold up the others.
+          # A cold start can take a minute, hence the long timeout.
+          for url in "${urls[@]}"; do
+            (
+              code=$(curl -sS -o /dev/null -w '%{http_code} %{time_total}s' \
+                --max-time 100 --retry 2 --retry-delay 5 "$url" 2>&1) || true
+              echo "$code  $url"
+              case "$code" in
+                2*|3*) ;;
+                *) echo "::warning title=Backend not responding::$url -> $code" ;;
+              esac
+            ) &
+          done
+          wait
+
+          # Warnings instead of failures: a backend that is down all day would
+          # otherwise send an email every five minutes.
