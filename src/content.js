@@ -27,8 +27,8 @@ export const work = [
   {
     company: 'Broadstone Technologies',
     logo: '/logos/broadstone.webp',
-    role: 'Software Engineer',
-    period: 'Apr 2026 to Sep 2026',
+    role: 'Backend Developer (Python)',
+    period: 'Jun 2026 to Aug 2026',
     story: `I worked on the pipeline more than the product. Scanning and inventory
       became stages every build had to pass, so problems surfaced before release
       rather than after it. Around that: Flask APIs, AWS under least privilege IAM,
@@ -55,8 +55,8 @@ export const work = [
   {
     company: 'Programmers Force',
     logo: '/logos/programmersforce.svg',
-    role: 'Backend Engineer',
-    period: 'Jun 2024 to Apr 2026',
+    role: 'Associate Software Engineer',
+    period: 'Jul 2024 to Apr 2026',
     story: `Django REST Framework APIs serving over 100,000 requests a day. The
       work that mattered was getting the slow things out of the way: scraping and
       report generation used to run inside the request, so a user waited on them.
@@ -273,16 +273,7 @@ export const toolbelt = [
   { name: 'AWS', icon: '/tech/amazonwebservices.svg' },
   { name: 'Google Cloud', icon: '/tech/googlecloud.svg' },
   { name: 'GitHub Actions', icon: '/tech/githubactions.svg' },
-  { name: 'Git', icon: '/tech/git.svg' },
   { name: 'Selenium', icon: '/tech/selenium.svg' },
-  { name: 'Swagger', icon: '/tech/swagger.svg' },
-  { name: 'Postman', icon: '/tech/postman.svg' },
-  { name: 'Vercel', icon: '/tech/vercel.svg' },
-]
-
-export const aitools = [
-  { name: 'Claude Code', icon: '/tech/claudecode.svg' },
-  { name: 'Cursor', icon: '/tech/cursor.svg' },
 ]
 
 export const background = {

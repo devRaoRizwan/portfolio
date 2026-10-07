@@ -55,8 +55,7 @@ needs opening.
 | `profile` | Name, role, bio, core stack, email, links, photo |
 | `work` | Experience cards, each with a prose summary and a diagram |
 | `projects` | Project cards, each with a cover, a stack list and a diagram |
-| `toolbelt` | The Stack grid |
-| `aitools` | The AI tools grid |
+| `toolbelt` | The Tools grid |
 | `background` | Education and community |
 
 Images and other public assets belong in `public/`:

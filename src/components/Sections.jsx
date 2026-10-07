@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { profile, projects, work, toolbelt, aitools, background } from '../content'
+import { profile, projects, work, toolbelt, background } from '../content'
 import activity from '../activity.json'
 import EmailButton from './EmailButton'
 import Diagram from './Diagram'
@@ -197,7 +197,7 @@ export function Hero() {
 
             <div className="mt-7 grid grid-cols-2 gap-5 border-t border-[var(--color-line)] pt-6 sm:grid-cols-4">
               <Stat value={100000} suffix="+" label="Requests a day in production" />
-              <Stat value={2.3} decimals={1} suffix=" yrs" label="Shipping Python backends" />
+              <Stat value={2.1} decimals={1} suffix=" yrs" label="Shipping Python backends" />
               <Stat value={listings} suffix="+" label="Listings collected by JobHarvester" />
               <Stat value={liveProjects} label="Projects live right now" />
             </div>
@@ -420,15 +420,7 @@ export function Tools() {
     <Section id="stack" title="Tools">
       <Reveal>
         <div className="glass @container rounded-[24px] p-6 sm:p-7 lg:p-8">
-          <p className="eyebrow mb-5">Stack</p>
           <LogoGrid items={toolbelt} />
-
-          <div className="my-7 h-px bg-[var(--color-line)]" />
-
-          <p className="eyebrow mb-5" id="ai">
-            AI tools
-          </p>
-          <LogoGrid items={aitools} />
         </div>
       </Reveal>
     </Section>
