@@ -62,8 +62,8 @@ export default function AvailabilityToast() {
     >
       <div className="flex items-start gap-3 rounded-2xl border border-white/80 bg-white/95 p-4 shadow-[0_1px_2px_rgba(10,10,10,0.05),0_18px_40px_-12px_rgba(10,10,10,0.3)] backdrop-blur-xl">
         <span aria-hidden className="relative mt-1.5 flex h-2 w-2 shrink-0">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#10b981] opacity-70" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-[#10b981]" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-70" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-signal" />
         </span>
 
         <div className="min-w-0 flex-1">

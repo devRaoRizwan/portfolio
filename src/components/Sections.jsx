@@ -293,10 +293,10 @@ function ProjectCard({ project, delay, eager = false }) {
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                 <h3 className="text-lg font-semibold text-ink sm:text-xl">{project.name}</h3>
                 {project.links.live && (
-                  <span className="inline-flex items-center gap-2 font-mono text-xs text-[#047857]">
+                  <span className="inline-flex items-center gap-2 font-mono text-xs text-signal-ink">
                     <span aria-hidden className="relative flex h-1.5 w-1.5">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#10b981] opacity-70" />
-                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#10b981]" />
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-70" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal" />
                     </span>
                     Live
                   </span>

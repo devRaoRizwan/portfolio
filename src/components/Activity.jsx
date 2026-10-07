@@ -6,8 +6,8 @@ const WEEKS = 53
 const CELL = 11
 const GAP = 3
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-// The green scale both GitHub and LeetCode use for their calendars.
-const SHADES = ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
+// The site's own emerald, light to dark, so the calendars match the Live dots.
+const SHADES = ['#e7e7ec', '#a7f3d0', '#34d399', '#059669', '#065f46']
 
 const leetcodeLevel = (n) => (n === 0 ? 0 : n <= 2 ? 1 : n <= 4 ? 2 : n <= 7 ? 3 : 4)
 

@@ -30,11 +30,5 @@
         }
       ]
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/((?!assets/|fonts/|images/|logos/|tech/|documents/|favicon|robots|sitemap|site\\.webmanifest|google).*)",
-      "destination": "/"
-    }
   ]
 }

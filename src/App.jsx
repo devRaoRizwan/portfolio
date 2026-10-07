@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { Hero, Projects, Experience, Tools, Contact } from './components/Sections'
 import Header from './components/Header'
 import Activity from './components/Activity'
+import Mesh from './components/Mesh'
 import AvailabilityToast from './components/AvailabilityToast'
 
 export default function App() {
@@ -11,12 +12,7 @@ export default function App() {
         Skip to content
       </a>
 
-      <div className="mesh" aria-hidden>
-        <i />
-        <i />
-        <i />
-        <i />
-      </div>
+      <Mesh />
 
       <Header />
       <Hero />

@@ -8,7 +8,6 @@ export const profile = {
     CI/CD that stops a release when a scan finds something.`,
 
   email: 'dev.raorizwan@gmail.com',
-  phone: '+92 323 454 4880',
   resume: '/documents/RaoRizwan_Resume.pdf',
 
   github: 'https://github.com/devRaoRizwan',
@@ -55,7 +54,7 @@ export const work = [
   },
   {
     company: 'Programmers Force',
-    logo: '/logos/programmersforce.webp',
+    logo: '/logos/programmersforce.svg',
     role: 'Backend Engineer',
     period: 'Jun 2024 to Apr 2026',
     story: `Django REST Framework APIs serving over 100,000 requests a day. The
