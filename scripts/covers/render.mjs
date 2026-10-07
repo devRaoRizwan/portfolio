@@ -2,7 +2,11 @@
 // a set, plus the site's social preview (og.png) in the same fonts. Output is 1400x612 (the card's 16:7 frame); everything that matters
 // sits in the top 500px because phones crop the card to 16:6 from the top.
 //
+// Each cover comes in two themes: dark (the project page slideshow) and light
+// (the home page card, as <slug>-light.webp).
+//
 // Run: npm i --no-save playwright && node scripts/covers/render.mjs
+//      add --light to render only the light covers and leave everything else alone
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs'
 import { resolve, extname } from 'node:path'
 import { chromium } from 'playwright'
@@ -18,6 +22,7 @@ const covers = [
     logo: 'public/logos/projects/bomwatcher.svg',
     accent: '#4FD1C1',
     glow: '#0F766E',
+    ink: '#0F766E',
     headline: ['Know every dependency', 'and <em>AI model</em> your', 'code ships with'],
     sub: 'AI Bill of Materials for your GitHub repos, generated on your own GitHub Actions.',
     chips: ['CycloneDX 1.6', 'Code never leaves GitHub'],
@@ -29,6 +34,7 @@ const covers = [
     logo: 'public/logos/projects/sitescopia.svg',
     accent: '#38BDF8',
     glow: '#1E3A8A',
+    ink: '#0369A1',
     headline: ['See what your', 'page is <em>really</em>', '<em>telling you</em>'],
     sub: 'Evidence-led website analysis for SEO, accessibility, security, performance and domain signals.',
     chips: ['38 checks · 7 categories', 'Evidence in every result'],
@@ -40,6 +46,7 @@ const covers = [
     logo: 'public/logos/projects/jobharvester.webp',
     accent: '#FF4D79',
     glow: '#831843',
+    ink: '#E11D48',
     headline: ['A smarter way to', 'discover the <em>right</em>', '<em>opportunities</em>'],
     sub: 'Tech jobs from Lahore companies, crawled on a schedule and searchable in one place.',
     chips: ['Scheduled crawlers', 'Django REST API'],
@@ -51,6 +58,7 @@ const covers = [
     logo: 'public/logos/projects/jobbr.svg',
     accent: '#A78BFA',
     glow: '#4C1D95',
+    ink: '#6D28D9',
     headline: ['One job board API', 'for <em>two very</em>', '<em>different users</em>'],
     sub: 'Employers and job seekers share the data. JWT and role-based access keep them apart.',
     chips: ['JWT auth', 'Role-based access'],
@@ -63,45 +71,70 @@ const dataUri = (path) => `data:${MIME[extname(path)]};base64,${readFileSync(res
 const inter = dataUri('public/fonts/inter.woff2')
 const mono = dataUri('public/fonts/jetbrains-mono.woff2')
 
-const page = (c) => {
+// Light keeps the same layout; the bright accents become deeper inks so the
+// highlighted words and chips still read on white.
+const THEMES = {
+  dark: (c) => ({
+    text: '#fff',
+    sub: 'rgba(255,255,255,0.7)',
+    domain: 'rgba(255,255,255,0.85)',
+    em: c.accent,
+    grid: 'rgba(255,255,255,0.035)',
+    background: `radial-gradient(900px 520px at 88% 30%, ${c.glow}66, transparent 70%),
+      radial-gradient(700px 420px at 0% 0%, ${c.glow}33, transparent 70%),
+      #0b0d12`,
+    tileShadow: `0 30px 80px -20px ${c.glow}, 0 0 0 1px rgba(255,255,255,0.08)`,
+  }),
+  light: (c) => ({
+    text: '#0a0a0a',
+    sub: '#4a4a52',
+    domain: '#3a3a3a',
+    em: c.ink,
+    grid: 'rgba(10,10,10,0.045)',
+    background: `radial-gradient(900px 520px at 88% 30%, ${c.accent}40, transparent 70%),
+      radial-gradient(700px 420px at 0% 0%, ${c.accent}1f, transparent 70%),
+      #f7f7f9`,
+    tileShadow: `0 30px 70px -24px ${c.glow}99, 0 0 0 1px rgba(10,10,10,0.06)`,
+  }),
+}
+
+const page = (c, theme) => {
   const logo = dataUri(c.logo)
+  const t = THEMES[theme](c)
   return `<!doctype html><html><head><style>
   @font-face { font-family: Inter; font-weight: 400 700; src: url(${inter}) format('woff2'); }
   @font-face { font-family: Mono; font-weight: 400 500; src: url(${mono}) format('woff2'); }
   * { margin: 0; box-sizing: border-box; }
   body {
     width: ${W}px; height: ${H}px; overflow: hidden; position: relative;
-    font-family: Inter, sans-serif; color: #fff;
-    background:
-      radial-gradient(900px 520px at 88% 30%, ${c.glow}66, transparent 70%),
-      radial-gradient(700px 420px at 0% 0%, ${c.glow}33, transparent 70%),
-      #0b0d12;
+    font-family: Inter, sans-serif; color: ${t.text};
+    background: ${t.background};
   }
   body::before {
     content: ''; position: absolute; inset: 0;
     background-image:
-      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      linear-gradient(${t.grid} 1px, transparent 1px),
+      linear-gradient(90deg, ${t.grid} 1px, transparent 1px);
     background-size: 48px 48px;
     mask-image: linear-gradient(to bottom, #000 40%, transparent 100%);
   }
   .wrap { position: absolute; inset: 88px 80px auto 80px; }
   .hero img { width: 100%; height: 100%; display: block; }
   h1 { font-size: 66px; line-height: 1.04; font-weight: 700; letter-spacing: -0.035em; max-width: 780px; }
-  h1 em { font-style: normal; color: ${c.accent}; }
-  p { margin-top: 26px; max-width: 640px; font-size: 22px; line-height: 1.45; color: rgba(255,255,255,0.7); }
+  h1 em { font-style: normal; color: ${t.em}; }
+  p { margin-top: 26px; max-width: 640px; font-size: 22px; line-height: 1.45; color: ${t.sub}; }
   .foot { position: absolute; left: 80px; right: 80px; top: 440px; display: flex; align-items: center; justify-content: space-between; }
   .chips { display: flex; gap: 12px; }
   .chip {
-    font-size: 18px; font-weight: 600; color: ${c.accent};
+    font-size: 18px; font-weight: 600; color: ${t.em};
     padding: 10px 18px; border-radius: 999px;
-    border: 1px solid ${c.accent}55; background: ${c.accent}14;
+    border: 1px solid ${t.em}55; background: ${t.em}14;
   }
-  .domain { font-family: Mono, monospace; font-size: 20px; font-weight: 500; color: rgba(255,255,255,0.85); }
+  .domain { font-family: Mono, monospace; font-size: 20px; font-weight: 500; color: ${t.domain}; }
   .hero {
     position: absolute; right: 120px; top: 100px; width: 270px; height: 270px;
     border-radius: 64px; overflow: hidden;
-    box-shadow: 0 30px 80px -20px ${c.glow}, 0 0 0 1px rgba(255,255,255,0.08);
+    box-shadow: ${t.tileShadow};
   }
   </style></head><body>
   <div class="wrap">
@@ -116,11 +149,15 @@ const page = (c) => {
   </body></html>`
 }
 
+const lightOnly = process.argv.includes('--light')
+const themes = lightOnly ? ['light'] : ['dark', 'light']
+
 mkdirSync(OUT, { recursive: true })
 const browser = await chromium.launch()
 const tab = await browser.newPage({ viewport: { width: W, height: H } })
-for (const c of covers) {
-  await tab.setContent(page(c), { waitUntil: 'load' })
+for (const c of covers) for (const theme of themes) {
+  const name = theme === 'dark' ? c.slug : `${c.slug}-light`
+  await tab.setContent(page(c, theme), { waitUntil: 'load' })
   await tab.evaluate(() => document.fonts.ready)
   const png = await tab.screenshot({ type: 'png' })
 
@@ -140,9 +177,14 @@ for (const c of covers) {
     return { 1400: encode(img.width), 800: encode(800) }
   }, `data:image/png;base64,${png.toString('base64')}`)
 
-  writeFileSync(resolve(OUT, `${c.slug}.webp`), Buffer.from(webp['1400'], 'base64'))
-  writeFileSync(resolve(OUT, `${c.slug}-800.webp`), Buffer.from(webp['800'], 'base64'))
-  console.log(`[covers] ${c.slug}.webp, ${c.slug}-800.webp`)
+  writeFileSync(resolve(OUT, `${name}.webp`), Buffer.from(webp['1400'], 'base64'))
+  writeFileSync(resolve(OUT, `${name}-800.webp`), Buffer.from(webp['800'], 'base64'))
+  console.log(`[covers] ${name}.webp, ${name}-800.webp`)
+}
+
+if (lightOnly) {
+  await browser.close()
+  process.exit(0)
 }
 
 // Social preview, 1200x630 PNG: same look as the LinkedIn banner

@@ -3,6 +3,7 @@ import { profile, projects, work, toolbelt, background } from '../content'
 import activity from '../activity.json'
 import EmailButton from './EmailButton'
 import Diagram from './Diagram'
+import { projectPath } from './ProjectPage'
 import {
   gmailWebUrl,
   openGmail,
@@ -262,20 +263,17 @@ function BackgroundPanel() {
 }
 
 function ProjectCard({ project, delay, eager = false }) {
-  const repos = [
-    { key: 'overview', label: 'Overview' },
-    { key: 'frontend', label: 'Frontend' },
-    { key: 'backend', label: 'Backend' },
-    { key: 'crawlers', label: 'Crawlers' },
-  ].filter((r) => project.links[r.key])
+  // The home page shows the light cover; the project page slideshow keeps the dark one.
+  const light = project.cover.image.replace('.webp', '-light.webp')
+  const source = project.links.overview || project.links.backend
 
   return (
     <Reveal delay={delay} className="h-full">
-      <article className="glass glass-hover @container flex h-full flex-col overflow-hidden rounded-[22px]">
-        <div className="bg-[#0e0e13]">
+      <article className="glass glass-hover relative flex h-full flex-col overflow-hidden rounded-[22px]">
+        <div className="relative bg-[#f7f7f9]">
           <img
-            src={project.cover.image}
-            srcSet={`${project.cover.image.replace('.webp', '-800.webp')} 800w, ${project.cover.image} 1400w`}
+            src={light}
+            srcSet={`${light.replace('.webp', '-800.webp')} 800w, ${light} 1400w`}
             sizes="(min-width: 1024px) 50vw, 100vw"
             alt={project.cover.alt}
             width={1400}
@@ -305,44 +303,40 @@ function ProjectCard({ project, delay, eager = false }) {
               <p className="mt-0.5 font-mono text-[13px] text-muted">{project.tagline}</p>
             </div>
           </div>
-          <div className="mt-3 flex flex-col">
-            <ClampText className="text-[14px] leading-relaxed text-ink-soft">
-              {project.description.replace('{listings}', listings.toLocaleString('en-US'))}
-            </ClampText>
-          </div>
-
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {project.stack.map((tech) => (
-              <Chip key={tech}>{tech}</Chip>
-            ))}
-          </div>
-
-          {project.diagram && <Diagram diagram={project.diagram} />}
 
           <div className="no-print mt-auto flex flex-wrap items-center gap-2 pt-6">
-            {project.links.live && (
+            {/* Links sit above the card-wide details link so they stay clickable. */}
+            {project.links.live ? (
               <a
                 href={project.links.live}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-dark"
+                className="relative z-10 inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-dark"
               >
                 Open live site
                 <IconArrow width={15} height={15} />
               </a>
-            )}
-            {repos.map((repo) => (
+            ) : (
               <a
-                key={repo.key}
-                href={project.links[repo.key]}
+                href={source}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="glass-chip glass-hover inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink"
+                className="glass-chip glass-hover relative z-10 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink"
               >
                 <IconGithub width={15} height={15} />
-                {repos.length > 1 || repo.key === 'overview' ? repo.label : 'Source'}
+                Source
               </a>
-            ))}
+            )}
+            {/* Stretched over the whole card, so clicking anywhere opens the project page;
+                hovering the card lights the button up too. Not `relative`, or the stretch
+                would shrink to the button. */}
+            <a
+              href={projectPath(project)}
+              className="inline-flex items-center gap-2 rounded-xl border border-[#d4d4d8] bg-white px-4 py-2.5 text-sm font-medium text-ink shadow-[0_1px_2px_rgba(10,10,10,0.06)] transition-colors after:absolute after:inset-0 after:rounded-[22px] after:content-[''] hover:border-ink"
+            >
+              View details
+              <IconArrow width={15} height={15} />
+            </a>
           </div>
         </div>
       </article>

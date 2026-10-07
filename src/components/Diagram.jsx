@@ -182,16 +182,19 @@ function NodeIcon({ icon, size = 22 }) {
 function Node({ node }) {
   const muted = node.tone === 'muted'
   return (
+    // A compact row when the diagram is stacked; a centred tile once lanes run across.
     <div
-      className={`glass-chip flex flex-1 flex-col items-center gap-2 rounded-xl px-3 py-3.5 text-center ${
+      className={`glass-chip flex flex-1 items-center gap-3 rounded-xl px-3.5 py-2.5 text-left @2xl:flex-col @2xl:gap-2 @2xl:px-3 @2xl:py-3.5 @2xl:text-center ${
         muted ? 'opacity-70' : ''
       }`}
     >
       <NodeIcon icon={node.icon} />
-      <span className="text-[13px] font-medium leading-tight text-ink">{node.label}</span>
-      {node.sub && (
-        <span className="font-mono text-[10px] leading-tight text-muted">{node.sub}</span>
-      )}
+      <span className="flex min-w-0 flex-col gap-1 @2xl:items-center @2xl:gap-2">
+        <span className="text-[13px] font-medium leading-tight text-ink">{node.label}</span>
+        {node.sub && (
+          <span className="font-mono text-[10px] leading-tight text-muted">{node.sub}</span>
+        )}
+      </span>
     </div>
   )
 }
@@ -275,14 +278,16 @@ function Split({ diagram }) {
   )
 }
 
-export default function Diagram({ diagram }) {
+// Cards hide the nodes on phones and keep only the note; `expanded` (the
+// project pages) always draws them, stacked top to bottom on narrow screens.
+export default function Diagram({ diagram, expanded = false }) {
   if (!diagram) return null
 
   return (
     <figure className="glass-inset mt-6 rounded-2xl p-4 sm:p-5">
       {diagram.caption && <figcaption className="eyebrow mb-4">{diagram.caption}</figcaption>}
 
-      <div className="hidden sm:block">
+      <div className={expanded ? 'mb-4' : 'hidden sm:block'}>
         {diagram.kind === 'split' ? (
           <Split diagram={diagram} />
         ) : (

@@ -92,12 +92,19 @@ export const work = [
 export const projects = [
   {
     name: 'BOMWatcher',
+    slug: 'bomwatcher',
     logo: '/logos/projects/bomwatcher.svg',
     tagline: 'An AI bill of materials for your GitHub repos',
     cover: {
       image: '/images/covers/bomwatcher.webp',
       alt: 'BOMWatcher: know every dependency and AI model your code ships with',
     },
+    // Screenshots shown after the cover in the project's slideshow.
+    gallery: [
+      { src: '/images/projects/bomwatcher-1.webp', alt: 'BOMWatcher landing page with a sample AI-BOM' },
+      { src: '/images/projects/bomwatcher-2.webp', alt: 'Dashboard with tracked repositories and the AI models in use' },
+      { src: '/images/projects/bomwatcher-3.webp', alt: 'A repository inventory: components, AI models and licenses' },
+    ],
     description: `You connect GitHub, choose the repos to watch, and merge one
       small pull request. After that, every push runs a scan on your own GitHub
       Actions and reports back which libraries and AI models the code uses,
@@ -129,6 +136,61 @@ export const projects = [
       'Syft',
       'CycloneDX',
     ],
+    // The project page: problem, what I built, how it flows, and the tech by layer.
+    details: {
+      problem: `AI features are going into codebases faster than anyone tracks them.
+        Most teams cannot quickly say which models they call, from which
+        providers, in which repos, or under what licenses.`,
+      solution: `BOMWatcher answers that per repo. You install a GitHub App and merge
+        one pull request. After that, every push runs a scan on your own GitHub
+        Actions and sends back a CycloneDX 1.6 bill of materials.`,
+      points: [
+        'The code is never cloned. The only thing that leaves GitHub is the finished report.',
+        'The scan arrives as a pull request, so nothing runs until the owner reads it and merges.',
+        'Webhooks are checked with an HMAC signature, and the API replies before it downloads anything.',
+      ],
+      flow: {
+        caption: 'From install to a stored AI-BOM',
+        kind: 'flow',
+        lanes: [
+          {
+            label: 'Once per repo',
+            nodes: [
+              { icon: 'tech:github', label: 'Install', sub: 'GitHub App' },
+              { icon: 'ui:search', label: 'Pick repos', sub: 'Up to 3 on trial' },
+              { icon: 'ui:commit', label: 'Workflow PR', sub: 'Opened by the API' },
+              { icon: 'ui:user', label: 'Merge', sub: 'Owner reviews' },
+            ],
+          },
+          {
+            label: 'Every push to the default branch, on GitHub',
+            nodes: [
+              { icon: 'tech:githubactions', label: 'Runner', sub: 'Checkout, read-only' },
+              { icon: 'ui:inventory', label: 'Syft', sub: 'Dependencies' },
+              { icon: 'tech:python', label: 'Detector', sub: 'AI models, SDKs' },
+              { icon: 'ui:build', label: 'Artifact', sub: 'bom.cdx.json' },
+            ],
+          },
+          {
+            label: 'Back on BOMWatcher',
+            nodes: [
+              { icon: 'ui:lock', label: 'Webhook', sub: 'Signed workflow_run' },
+              { icon: 'ui:bolt', label: '202 Accepted', sub: 'Verify, then reply' },
+              { icon: 'tech:fastapi', label: 'Ingest', sub: 'Download, validate' },
+              { icon: 'tech:postgresql', label: 'Store', sub: 'Keyed by run ID' },
+            ],
+          },
+        ],
+        note: 'The only thing that crosses from the repo to BOMWatcher is the report itself.',
+      },
+      tech: [
+        { layer: 'Backend', items: ['FastAPI', 'SQLAlchemy', 'PostgreSQL'] },
+        { layer: 'Scanning', items: ['GitHub Apps', 'GitHub Actions', 'Syft', 'CycloneDX 1.6'] },
+        { layer: 'Auth', items: ['JWT', 'Argon2', 'HMAC webhooks'] },
+        { layer: 'Frontend', items: ['React 19'] },
+        { layer: 'Hosting', items: ['Vercel', 'Render'] },
+      ],
+    },
     links: {
       live: 'https://bomwatcher.vercel.app',
       overview: 'https://github.com/devRaoRizwan/bomwatcher',
@@ -139,12 +201,18 @@ export const projects = [
   },
   {
     name: 'SiteScopia',
+    slug: 'sitescopia',
     logo: '/logos/projects/sitescopia.svg',
     tagline: 'Evidence-led website analysis',
     cover: {
       image: '/images/covers/sitescopia.webp',
       alt: 'SiteScopia: see what your page is really telling you',
     },
+    gallery: [
+      { src: '/images/projects/sitescopia-1.webp', alt: 'SiteScopia home page with the URL analyzer' },
+      { src: '/images/projects/sitescopia-2.webp', alt: 'The 38 checks, grouped into seven categories' },
+      { src: '/images/projects/sitescopia-3.webp', alt: 'A finished report for stripe.com with scores and findings' },
+    ],
     description: `Analyze a public URL across SEO, accessibility, security,
       performance, and domain signals. Every finding includes evidence and a
       practical fix.`,
@@ -165,6 +233,57 @@ export const projects = [
       note: 'Safe fetching, independent checks, and evidence-backed fixes in one report.',
     },
     stack: ['React', 'Vite', 'FastAPI', 'Python'],
+    details: {
+      problem: `Checking a page properly means opening several tools: one for meta
+        tags, one for security headers, a WHOIS lookup, a link checker. Each one
+        gives its own verdict, and most of them do not show what they actually saw.`,
+      solution: `SiteScopia does it in one pass from a single URL. It fetches the page
+        once, runs 38 checks over it, and every finding comes with the evidence it
+        was based on and a suggested fix.`,
+      points: [
+        'A URL that resolves to a private or internal address is refused, and every redirect is checked again.',
+        'Each check runs on its own, so one that breaks becomes a note in the report instead of an error.',
+        'If a site answers with a bot challenge, the result says blocked rather than scoring the challenge page.',
+      ],
+      flow: {
+        caption: 'From a URL to a scored report',
+        kind: 'flow',
+        lanes: [
+          {
+            label: 'In the request',
+            nodes: [
+              { icon: 'ui:globe', label: 'URL', sub: 'Public addresses only' },
+              { icon: 'tech:fastapi', label: 'Job', sub: '202 and a token' },
+              { icon: 'tech:react', label: 'Poll', sub: 'Until it is done' },
+            ],
+          },
+          {
+            label: 'In the background job',
+            nodes: [
+              { icon: 'ui:shield', label: 'Fetch', sub: 'Checked every hop' },
+              { icon: 'ui:block', label: 'Challenge gate', sub: 'Blocked, not scored' },
+              { icon: 'ui:search', label: 'Parse once', sub: 'BeautifulSoup' },
+              { icon: 'ui:clock', label: 'Enrich', sub: 'RDAP, links in parallel' },
+            ],
+          },
+          {
+            label: 'Into the report',
+            nodes: [
+              { icon: 'ui:cog', label: '38 checks', sub: 'Each isolated' },
+              { icon: 'ui:bolt', label: 'Score', sub: 'Weighted, 0 to 100' },
+              { icon: 'ui:inventory', label: 'Report', sub: 'Evidence and fixes' },
+            ],
+          },
+        ],
+        note: 'The request only validates and queues. Everything slow happens in the job the browser polls.',
+      },
+      tech: [
+        { layer: 'Backend', items: ['FastAPI', 'httpx', 'asyncio'] },
+        { layer: 'Analysis', items: ['BeautifulSoup4', 'RDAP', 'curl_cffi'] },
+        { layer: 'Frontend', items: ['React 18', 'TanStack Query', 'Vite'] },
+        { layer: 'Hosting', items: ['Render', 'Vercel'] },
+      ],
+    },
     links: {
       live: 'https://sitescopia.online/',
       overview: 'https://github.com/devRaoRizwan/sitescopia',
@@ -175,12 +294,18 @@ export const projects = [
   },
   {
     name: 'JobHarvester',
+    slug: 'jobharvester',
     logo: '/logos/projects/jobharvester.webp',
     tagline: 'Job aggregation for the Pakistani tech market',
     cover: {
       image: '/images/covers/jobharvester.webp',
       alt: 'JobHarvester: a smarter way to discover the right opportunities',
     },
+    gallery: [
+      { src: '/images/projects/jobharvester-1.webp', alt: 'A job page with the description and quick facts' },
+      { src: '/images/projects/jobharvester-2.webp', alt: 'Browsing the companies JobHarvester tracks' },
+      { src: '/images/projects/jobharvester-3.webp', alt: 'Home page with search and the latest listings' },
+    ],
     description: `Crawlers pull postings from Lahore technology companies on a
       schedule, a Django REST API normalises them into Postgres, and a React
       frontend makes them searchable. Over {listings} listings collected so far.`,
@@ -210,6 +335,57 @@ export const projects = [
       'Selenium',
       'GitHub Actions',
     ],
+    details: {
+      problem: `Tech jobs in Lahore are spread across dozens of company career pages,
+        each with its own layout, and many of them never reach the big job boards.
+        Finding them means checking site after site by hand.`,
+      solution: `JobHarvester checks those pages on a schedule and puts every listing
+        in one feed. Crawlers send what they find to a Django REST API, which
+        stores it in PostgreSQL, and a React app makes it searchable.`,
+      points: [
+        'Each company has its own crawler, so a site that changes its layout only breaks that one.',
+        'Jobs are matched on their source URL, so running the crawl again updates listings instead of copying them.',
+        'Crawlers never touch the database. They post through the API with a key, and the API does the checking.',
+      ],
+      flow: {
+        caption: 'From a career page to the search box',
+        kind: 'flow',
+        lanes: [
+          {
+            label: 'On a schedule, on GitHub Actions',
+            nodes: [
+              { icon: 'tech:githubactions', label: 'Schedule', sub: 'Cron job' },
+              { icon: 'ui:cog', label: 'Runner', sub: 'One crawler per company' },
+              { icon: 'tech:selenium', label: 'Fetch', sub: 'requests, Selenium, JSON' },
+              { icon: 'ui:search', label: 'Parse', sub: 'BeautifulSoup' },
+            ],
+          },
+          {
+            label: 'Into the API',
+            nodes: [
+              { icon: 'ui:key', label: 'Submit', sub: 'Ingest key header' },
+              { icon: 'ui:shield', label: 'Validate', sub: 'Serializer, throttled' },
+              { icon: 'tech:django', label: 'Upsert', sub: 'Matched on source URL' },
+              { icon: 'tech:postgresql', label: 'PostgreSQL', sub: 'Supabase' },
+            ],
+          },
+          {
+            label: 'Out to people',
+            nodes: [
+              { icon: 'ui:server', label: 'REST API', sub: 'Paginated, searchable' },
+              { icon: 'tech:react', label: 'Frontend', sub: 'Search, shareable links' },
+            ],
+          },
+        ],
+        note: 'Crawling runs on its own schedule, so an ingest that takes minutes never slows a page load.',
+      },
+      tech: [
+        { layer: 'Crawling', items: ['Python', 'requests', 'BeautifulSoup4', 'Selenium'] },
+        { layer: 'Backend', items: ['Django REST Framework', 'PostgreSQL'] },
+        { layer: 'Frontend', items: ['React 18', 'Vite'] },
+        { layer: 'Hosting', items: ['GitHub Actions', 'Render', 'Supabase', 'Vercel'] },
+      ],
+    },
     links: {
       live: 'https://job-harvester-demo.vercel.app',
       overview: 'https://github.com/devRaoRizwan/JobHarvesterDemo',
@@ -220,6 +396,7 @@ export const projects = [
   },
   {
     name: 'Jobbr',
+    slug: 'jobbr',
     logo: '/logos/projects/jobbr.svg',
     tagline: 'A job board API with two very different users',
     cover: {
@@ -249,6 +426,26 @@ export const projects = [
       note: 'Same data underneath. The token decides which half of the API you can see.',
     },
     stack: ['Django REST Framework', 'JWT', 'PostgreSQL', 'drf-spectacular'],
+    details: {
+      problem: `A job board has two kinds of users who want opposite things from the
+        same data. Employers post jobs and read applications. Job seekers search,
+        apply and save jobs. Neither side should be able to do the other's half.`,
+      solution: `I built Jobbr as a learning project to get role-based permissions
+        right in Django REST Framework. Every user has a role, every request
+        carries a JWT, and each endpoint checks both who you are and whether the
+        record is yours.`,
+      points: [
+        'Only employers can post jobs, and only the employer who posted a job can edit it, delete it or read its applications.',
+        'Job seekers apply with a resume and a cover letter, and the database stops anyone applying to the same job twice.',
+        'Open jobs can be searched and filtered by type, location and salary period, and Swagger documents every endpoint.',
+      ],
+      tech: [
+        { layer: 'API', items: ['Django', 'Django REST Framework'] },
+        { layer: 'Auth', items: ['SimpleJWT'] },
+        { layer: 'Query and docs', items: ['django-filter', 'drf-spectacular'] },
+        { layer: 'Database', items: ['SQLite (development)'] },
+      ],
+    },
     links: {
       live: null,
       overview: null,
