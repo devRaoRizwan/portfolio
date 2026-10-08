@@ -3,9 +3,11 @@ export const profile = {
   role: 'Backend Engineer',
   coreStack: ['Python', 'Django', 'DRF', 'PostgreSQL', 'Celery', 'AWS'],
 
-  bio: `Two years on the half of a product nobody sees. Django REST APIs in
-    production, Celery and RabbitMQ keeping slow work off the request path, and
-    CI/CD that stops a release when a scan finds something.`,
+  // The hero shows both; phones show only the lead line.
+  bioLead: 'I break code on purpose so prod never breaks by accident.',
+  bio: `Two years of Python backend in production. Django REST APIs at 100,000+
+    requests a day. Celery and RabbitMQ for the slow stuff. CI/CD pipelines with
+    security scans that stop bad releases before they ship.`,
 
   email: 'dev.raorizwan@gmail.com',
   resume: '/documents/RaoRizwan_Resume.pdf',

@@ -94,12 +94,12 @@ function Stat({ value, decimals = 0, suffix = '', label }) {
     maximumFractionDigits: decimals,
   })
   return (
-    <div ref={ref}>
-      <p className="tabular text-[1.35rem] font-semibold leading-none tracking-tight text-ink sm:text-[2.1rem]">
+    <div ref={ref} className="min-w-0">
+      <p className="tabular text-[1.2rem] font-semibold leading-none tracking-tight text-ink sm:text-[2.1rem]">
         {pretty}
         {suffix}
       </p>
-      <p className="mt-2 text-[13px] leading-snug text-muted">{label}</p>
+      <p className="mt-1.5 text-[12px] leading-snug text-muted sm:mt-2 sm:text-[13px]">{label}</p>
     </div>
   )
 }
@@ -110,7 +110,7 @@ export function Hero() {
       <Shell>
         <div className="grid items-stretch gap-5 lg:grid-cols-[1.75fr_1fr] lg:gap-6">
         <div className="h-full">
-          <div className="glass h-full rounded-[26px] p-6 sm:p-8">
+          <div className="glass h-full rounded-[26px] p-5 sm:p-8">
             <div className="grid items-center gap-7 lg:grid-cols-[1fr_auto] lg:gap-10">
               <div className="min-w-0">
                 <div className="flex items-center gap-4">
@@ -122,42 +122,46 @@ export function Hero() {
                       width={160}
                       height={160}
                       fetchpriority="high"
-                      className="h-[76px] w-[76px] shrink-0 rounded-full object-cover shadow-[0_6px_20px_-6px_rgba(10,10,10,0.28)] ring-[3px] ring-white/80 sm:h-24 sm:w-24"
+                      className="h-16 w-16 shrink-0 rounded-full object-cover shadow-[0_6px_20px_-6px_rgba(10,10,10,0.28)] ring-[3px] ring-white/80 sm:h-24 sm:w-24"
                     />
                   </picture>
 
                   <div className="min-w-0">
                     <p className="eyebrow mb-1.5 lg:mb-4">
                       {profile.role}
+                      {/* Phones show the role only. */}
                       <span className="hidden text-faint/70 sm:inline"> · </span>
-                      <span className="block sm:inline">{profile.location}</span>
+                      <span className="hidden sm:inline">{profile.location}</span>
                     </p>
-                    <h1 className="text-[1.9rem] leading-[0.95] tracking-tight sm:text-[3rem] lg:text-[3.4rem]">
+                    <h1 className="text-[1.6rem] leading-[0.95] tracking-tight sm:text-[3rem] lg:text-[3.4rem]">
                       {profile.name}
                     </h1>
                   </div>
                 </div>
-                <p className="mt-4 max-w-2xl text-[14.5px] leading-relaxed text-ink-soft sm:text-[15px]">
+                <p className="mt-3.5 max-w-2xl text-[13.5px] font-medium leading-relaxed text-ink sm:mt-4 sm:text-[15px]">
+                  {profile.bioLead}
+                </p>
+                <p className="mt-1.5 hidden max-w-2xl text-[15px] leading-relaxed text-ink-soft sm:block">
                   {profile.bio}
                 </p>
 
-                <ul className="mt-5 flex flex-wrap gap-1.5 sm:mt-6">
+                <ul className="mt-4 flex flex-wrap gap-1.5 sm:mt-6">
                   {profile.coreStack.map((tech) => (
                     <li
                       key={tech}
-                      className="glass-chip rounded-lg px-2.5 py-1 font-mono text-xs text-ink-soft"
+                      className="glass-chip rounded-lg px-2 py-0.5 font-mono text-[11px] text-ink-soft sm:px-2.5 sm:py-1 sm:text-xs"
                     >
                       {tech}
                     </li>
                   ))}
                 </ul>
 
-                <div className="no-print mt-6 flex flex-wrap items-center gap-2 sm:mt-8 sm:gap-2.5">
+                <div className="no-print mt-5 flex flex-wrap items-center gap-2 sm:mt-8 sm:gap-2.5">
                   <EmailButton className="flex-1 sm:flex-none" />
                   <a
                     href={profile.resume}
                     download
-                    className="glass-chip glass-hover inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-ink sm:flex-none"
+                    className="glass-chip glass-hover inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-medium text-ink sm:flex-none sm:text-sm"
                   >
                     <IconDownload width={15} height={15} />
                     <span className="sm:hidden">CV</span>
@@ -196,7 +200,7 @@ export function Hero() {
               </picture>
             </div>
 
-            <div className="mt-7 grid grid-cols-2 gap-5 border-t border-[var(--color-line)] pt-6 sm:grid-cols-4">
+            <div className="mt-5 grid grid-cols-2 gap-4 border-t border-[var(--color-line)] pt-5 sm:mt-7 sm:grid-cols-4 sm:gap-5 sm:pt-6">
               <Stat value={100000} suffix="+" label="Requests a day in production" />
               <Stat value={2.1} decimals={1} suffix=" yrs" label="Shipping Python backends" />
               <Stat value={listings} suffix="+" label="Listings collected by JobHarvester" />

@@ -9,7 +9,7 @@ export default function EmailButton({ className = '' }) {
       target="_blank"
       rel="noreferrer noopener"
       title={profile.email}
-      className={`inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-dark ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-[13px] font-medium text-white sm:text-sm transition-colors hover:bg-accent-dark ${className}`}
     >
       <IconMail width={15} height={15} />
       Email
