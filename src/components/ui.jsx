@@ -147,6 +147,28 @@ export const IconLinkedin = (p) => (
   </svg>
 )
 
+// A plain document, in the same line style as the mail and brand icons.
+export const IconFile = (p) => (
+  <svg {...base} {...p}>
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <path d="M14 2v6h6" />
+    <path d="M8 13h8" />
+    <path d="M8 17h5" />
+  </svg>
+)
+
+// A page with a folded corner and a red PDF tag, for links to the CV.
+export const IconPdf = ({ width = 18, height = 18, className = '' }) => (
+  <svg width={width} height={height} viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+    <path d="M14 2v6h6" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+    <rect x="1.5" y="12.2" width="15.5" height="7.6" rx="1.8" fill="#E5322D" />
+    <text x="9.25" y="18.1" textAnchor="middle" fontSize="5.7" fontWeight="700" fill="#fff" fontFamily="Inter, system-ui, sans-serif">
+      PDF
+    </text>
+  </svg>
+)
+
 export const IconDownload = (p) => (
   <svg {...base} {...p}>
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />

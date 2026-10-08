@@ -1,9 +1,10 @@
 import { Analytics } from '@vercel/analytics/react'
-import { Hero, Projects, Experience, Tools, Contact } from './components/Sections'
+import { Hero, Projects, Experience, Tools } from './components/Sections'
 import Header from './components/Header'
 import Activity from './components/Activity'
 import Mesh from './components/Mesh'
 import AvailabilityToast from './components/AvailabilityToast'
+import Footer from './components/Footer'
 import ProjectPage, { projectPath } from './components/ProjectPage'
 import { projects } from './content'
 
@@ -26,6 +27,7 @@ export default function App({ path }) {
         <>
           <Header base="/" />
           <ProjectPage project={project} />
+          <Footer base="/" />
         </>
       ) : (
         <>
@@ -37,8 +39,8 @@ export default function App({ path }) {
             <Experience />
             <Activity />
             <Tools />
-            <Contact />
           </main>
+          <Footer />
         </>
       )}
 

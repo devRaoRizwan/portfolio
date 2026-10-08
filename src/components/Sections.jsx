@@ -5,8 +5,6 @@ import EmailButton from './EmailButton'
 import Diagram from './Diagram'
 import { projectPath } from './ProjectPage'
 import {
-  gmailWebUrl,
-  openGmail,
   Reveal,
   Logo,
   Chip,
@@ -14,11 +12,8 @@ import {
   useCountUp,
   IconGithub,
   IconLinkedin,
-  IconDownload,
+  IconPdf,
   IconArrow,
-  IconMail,
-  IconCopy,
-  IconCheck,
 } from './ui'
 
 // Rounded down to the hundred so "1,400+" stays true between daily refreshes.
@@ -163,7 +158,7 @@ export function Hero() {
                     download
                     className="glass-chip glass-hover inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-medium text-ink sm:flex-none sm:text-sm"
                   >
-                    <IconDownload width={15} height={15} />
+                    <IconPdf width={18} height={18} />
                     <span className="sm:hidden">CV</span>
                     <span className="hidden sm:inline">Download CV</span>
                   </a>
@@ -419,127 +414,6 @@ export function Tools() {
       <Reveal>
         <div className="glass @container rounded-[24px] p-6 sm:p-7 lg:p-8">
           <LogoGrid items={toolbelt} />
-        </div>
-      </Reveal>
-    </Section>
-  )
-}
-
-
-function CopyEmail() {
-  const [copied, setCopied] = useState(false)
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(profile.email)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1800)
-    } catch {
-      window.location.href = `mailto:${profile.email}`
-    }
-  }
-  return (
-    <button
-      type="button"
-      onClick={copy}
-      className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
-    >
-      {copied ? <IconCheck width={15} height={15} /> : <IconCopy width={15} height={15} />}
-      <span aria-live="polite">{copied ? 'Copied' : 'Copy email'}</span>
-    </button>
-  )
-}
-
-function ContactRow({ href, icon, label, value, external = true, download = false, onClick }) {
-  return (
-    <li>
-      <a
-        href={href}
-        onClick={onClick}
-        {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}
-        {...(download ? { download: true } : {})}
-        className="group flex items-center gap-4 rounded-2xl px-3 py-3.5 transition-colors hover:bg-white/[0.06] sm:px-4"
-      >
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
-          {icon}
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-[12px] text-white/50">{label}</span>
-          <span className="block truncate text-[14px] font-medium text-white">{value}</span>
-        </span>
-        <IconArrow
-          width={16}
-          height={16}
-          className="shrink-0 text-white/40 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-white"
-        />
-      </a>
-    </li>
-  )
-}
-
-export function Contact() {
-  const handle = (url) => new URL(url).pathname.split('/').filter(Boolean).pop()
-  return (
-    <Section id="contact" title="Contact">
-      <Reveal>
-        <div className="relative overflow-hidden rounded-[26px] bg-[#0b0b0f] p-6 text-white shadow-[0_30px_60px_-28px_rgba(10,10,10,0.55)] sm:p-10 lg:p-12">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(600px_320px_at_0%_0%,rgba(255,255,255,0.09),transparent_70%),radial-gradient(520px_300px_at_100%_100%,rgba(16,185,129,0.12),transparent_70%)]"
-          />
-          <div className="relative grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-14">
-            <div>
-              <h3 className="text-[1.9rem] font-semibold leading-[1.05] tracking-tight text-white sm:text-[2.6rem]">
-                Need a backend that holds up under load?
-              </h3>
-              <p className="mt-4 max-w-md text-[15px] leading-relaxed text-white/65">
-                I am looking for backend work, remote or on site in Lahore. If something
-                here matches what you need, email is the fastest way to reach me.
-              </p>
-              <div className="no-print mt-7 flex flex-wrap gap-2.5">
-                <a
-                  href={gmailWebUrl(profile.email)}
-                  onClick={(e) => openGmail(e, profile.email)}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white/85"
-                >
-                  <IconMail width={15} height={15} />
-                  Email me
-                </a>
-                <CopyEmail />
-              </div>
-            </div>
-
-            <ul className="-mx-3 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.03] p-1.5 sm:mx-0">
-              <ContactRow
-                href={gmailWebUrl(profile.email)}
-                onClick={(e) => openGmail(e, profile.email)}
-                icon={<IconMail width={17} height={17} />}
-                label="Email"
-                value={profile.email}
-              />
-              <ContactRow
-                href={profile.linkedin}
-                icon={<IconLinkedin width={17} height={17} />}
-                label="LinkedIn"
-                value={`in/${handle(profile.linkedin)}`}
-              />
-              <ContactRow
-                href={profile.github}
-                icon={<IconGithub width={17} height={17} />}
-                label="GitHub"
-                value={`@${handle(profile.github)}`}
-              />
-              <ContactRow
-                href={profile.resume}
-                external={false}
-                download
-                icon={<IconDownload width={17} height={17} />}
-                label="Resume"
-                value="Download CV (PDF)"
-              />
-            </ul>
-          </div>
         </div>
       </Reveal>
     </Section>

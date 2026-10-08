@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
-import { profile } from '../content'
 import { Shell } from './Sections'
-import { IconMail, gmailWebUrl, openGmail } from './ui'
 
 // `short` is the label phones use, so every link fits without scrolling.
 const LINKS = [
@@ -44,13 +42,9 @@ export default function Header({ base = '' }) {
       <Shell>
         <nav
           aria-label="Sections"
-          className="glass flex items-center gap-1 rounded-2xl py-1.5 pl-1.5 pr-1.5 sm:gap-2 sm:pl-4"
+          className="glass flex items-center gap-1 rounded-2xl px-1.5 py-1.5 sm:gap-2 sm:px-4"
         >
-          <a href={base ? '/' : '#top'} className="hidden shrink-0 text-[15px] font-semibold tracking-tight text-ink sm:block">
-            {profile.name}
-          </a>
-
-          <ul className="flex min-w-0 flex-1 items-center justify-between sm:ml-6 sm:mr-auto sm:flex-none sm:justify-start">
+          <ul className="flex min-w-0 flex-1 items-center justify-between sm:justify-start sm:gap-1">
             {LINKS.map((l) => (
               <li key={l.id}>
                 <a
@@ -74,18 +68,6 @@ export default function Header({ base = '' }) {
               </li>
             ))}
           </ul>
-
-          <a
-            href={gmailWebUrl(profile.email)}
-            onClick={(e) => openGmail(e, profile.email)}
-            target="_blank"
-            rel="noreferrer noopener"
-            aria-label="Email"
-            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-accent px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-dark sm:px-4"
-          >
-            <IconMail width={15} height={15} />
-            <span className="hidden sm:inline">Email</span>
-          </a>
         </nav>
       </Shell>
     </div>
