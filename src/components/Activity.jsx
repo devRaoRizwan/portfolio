@@ -9,8 +9,6 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 // The site's own emerald, light to dark, so the calendars match the Live dots.
 const SHADES = ['#e7e7ec', '#a7f3d0', '#34d399', '#059669', '#065f46']
 
-const leetcodeLevel = (n) => (n === 0 ? 0 : n <= 2 ? 1 : n <= 4 ? 2 : n <= 7 ? 3 : 4)
-
 // Dates are derived from the snapshot, not the clock, so the prerendered
 // markup and the hydrated markup always agree.
 const END = new Date(activity.fetchedAt.slice(0, 10) + 'T00:00:00Z')
@@ -26,7 +24,48 @@ function yearStats(days) {
   const from = windowStart(WEEKS).toISOString().slice(0, 10)
   const to = END.toISOString().slice(0, 10)
   const inWindow = days.filter((d) => d.date >= from && d.date <= to && d.count > 0)
-  return { total: inWindow.reduce((sum, d) => sum + d.count, 0), activeDays: inWindow.length }
+
+  // Longest run of consecutive active days inside the same window.
+  let longest = 0
+  let run = 0
+  let prev = null
+  for (const { date } of inWindow) {
+    const t = Date.parse(`${date}T00:00:00Z`)
+    run = prev !== null && t - prev === 86400000 ? run + 1 : 1
+    longest = Math.max(longest, run)
+    prev = t
+  }
+
+  return {
+    total: inWindow.reduce((sum, d) => sum + d.count, 0),
+    activeDays: inWindow.length,
+    longest,
+    busiest: Math.max(0, ...inWindow.map((d) => d.count)),
+  }
+}
+
+// One rule for both calendars, so a shade means the same thing on each: four
+// steps relative to that calendar's busiest day. On GitHub data this lands on
+// almost the same cut-offs GitHub uses for its own graph.
+function shadeBy(days) {
+  const { busiest } = yearStats(days)
+  return (_, count) => (count === 0 || !busiest ? 0 : Math.min(4, Math.ceil((4 * count) / busiest)))
+}
+
+const plural = (n, word) => `${n.toLocaleString('en-US')} ${word}${n === 1 ? '' : 's'}`
+
+function Stats({ items }) {
+  return (
+    <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-4">
+      {items.map(({ label, value }) => (
+        // Label first for screen readers ("Active days: 78"), number first on screen.
+        <div key={label} className="flex min-w-0 flex-col">
+          <dt className="order-2 mt-1.5 text-[12px] leading-snug text-muted">{label}</dt>
+          <dd className="order-1 tabular text-[1.35rem] font-semibold leading-none tracking-tight text-ink">{value}</dd>
+        </div>
+      ))}
+    </dl>
+  )
 }
 
 function buildWeeks(days, levelOf, weeksShown) {
@@ -107,8 +146,7 @@ function Legend() {
   )
 }
 
-function HeatmapCard({ name, handle, logo, url, icon, days, levelOf, unit }) {
-  const { total, activeDays } = yearStats(days)
+function HeatmapCard({ name, handle, logo, url, icon, days, levelOf, stats }) {
   return (
     <article className="glass flex h-full flex-col rounded-[22px] p-5 sm:p-6">
       <div className="flex items-center justify-between gap-4">
@@ -129,31 +167,25 @@ function HeatmapCard({ name, handle, logo, url, icon, days, levelOf, unit }) {
           Profile
         </a>
       </div>
+      <Stats items={stats} />
       <div className="glass-inset mt-5 rounded-2xl p-3 sm:p-4">
         <Heatmap days={days} levelOf={levelOf} label={`${name} activity over the last year`} />
       </div>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <p className="font-mono text-[12px] text-muted">
-          <span className="font-semibold text-ink">{total.toLocaleString('en-US')}</span> {unit}
-          {total === 1 ? '' : 's'} · <span className="font-semibold text-ink">{activeDays}</span> active day
-          {activeDays === 1 ? '' : 's'}{' '}
-          in the last year
-        </p>
+        <p className="font-mono text-[12px] text-muted">Calendar figures cover the last 12 months</p>
         <Legend />
       </div>
     </article>
   )
 }
 
-// A near-empty calendar reads as abandoned, so LeetCode waits for some history.
-const LEETCODE_MIN_ACTIVE_DAYS = 30
-
 export default function Activity() {
-  const { github } = activity
-  const leetcode = activity.leetcode && yearStats(activity.leetcode.days).activeDays >= LEETCODE_MIN_ACTIVE_DAYS
-    ? activity.leetcode
-    : null
+  const { github, leetcode } = activity
   if (!github && !leetcode) return null
+
+  const gh = github && yearStats(github.days)
+  const lc = leetcode && yearStats(leetcode.days)
+  const solved = leetcode?.solved
 
   return (
     <Section id="activity" title="Activity">
@@ -167,8 +199,13 @@ export default function Activity() {
               url={github.url}
               icon={<IconGithub width={15} height={15} />}
               days={github.days}
-              levelOf={(day) => day?.level ?? 0}
-              unit="contribution"
+              levelOf={shadeBy(github.days)}
+              stats={[
+                { label: 'Contributions', value: gh.total.toLocaleString('en-US') },
+                { label: 'Active days', value: gh.activeDays },
+                { label: 'Longest streak', value: plural(gh.longest, 'day') },
+                ...(github.repos != null ? [{ label: 'Public repos', value: github.repos }] : []),
+              ]}
             />
           </Reveal>
         )}
@@ -181,8 +218,13 @@ export default function Activity() {
               url={leetcode.url}
               icon={<IconCode width={15} height={15} />}
               days={leetcode.days}
-              levelOf={(_, count) => leetcodeLevel(count)}
-              unit="submission"
+              levelOf={shadeBy(leetcode.days)}
+              stats={[
+                ...(solved?.all != null ? [{ label: 'Problems solved', value: solved.all }] : []),
+                { label: 'Submissions', value: lc.total.toLocaleString('en-US') },
+                { label: 'Active days', value: lc.activeDays },
+                { label: 'Longest streak', value: plural(lc.longest, 'day') },
+              ]}
             />
           </Reveal>
         )}

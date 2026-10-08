@@ -37,9 +37,17 @@ async function github() {
   if (!days.length) throw new Error('GitHub markup changed, no days found')
   days.sort((a, b) => a.date.localeCompare(b.date))
 
+  // The repo count is a nice-to-have; a failed lookup should not cost the calendar.
+  let repos = previous.github?.repos ?? null
+  try {
+    const user = await fetch(`https://api.github.com/users/${GITHUB_USER}`, { signal: AbortSignal.timeout(15000) })
+    if (user.ok) repos = (await user.json()).public_repos ?? repos
+  } catch {}
+
   return {
     user: GITHUB_USER,
     url: profile.github,
+    repos,
     days,
   }
 }
@@ -55,7 +63,10 @@ async function jobharvester() {
 
 async function leetcode() {
   const query = `query ($u: String!) {
-    matchedUser(username: $u) { userCalendar { submissionCalendar } }
+    matchedUser(username: $u) {
+      userCalendar { submissionCalendar }
+      submitStatsGlobal { acSubmissionNum { difficulty count } }
+    }
   }`
   const res = await fetch('https://leetcode.com/graphql', {
     method: 'POST',
@@ -72,7 +83,12 @@ async function leetcode() {
     .map(([ts, count]) => ({ date: new Date(ts * 1000).toISOString().slice(0, 10), count }))
     .sort((a, b) => a.date.localeCompare(b.date))
 
-  return { user: LEETCODE_USER, url: profile.leetcode, days }
+  // Accepted problems, all time, split by difficulty.
+  const solved = Object.fromEntries(
+    (data.matchedUser.submitStatsGlobal?.acSubmissionNum ?? []).map(({ difficulty, count }) => [difficulty.toLowerCase(), count])
+  )
+
+  return { user: LEETCODE_USER, url: profile.leetcode, solved, days }
 }
 
 const sources = { github, leetcode, jobharvester }
