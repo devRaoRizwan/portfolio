@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { profile, projects, work, toolbelt, background } from '../content'
+import { profile, projects, work, toolbelt, aiStance, background } from '../content'
 import activity from '../activity.json'
 import EmailButton from './EmailButton'
 import Diagram from './Diagram'
@@ -414,6 +414,13 @@ export function Tools() {
       <Reveal>
         <div className="glass @container rounded-[24px] p-6 sm:p-7 lg:p-8">
           <LogoGrid items={toolbelt} />
+
+          <figure className="mt-6 border-t border-[var(--color-line)] pt-5 sm:mt-7 sm:pt-6">
+            <figcaption className="eyebrow mb-2.5">How I work with AI</figcaption>
+            <blockquote className="border-l-2 border-signal pl-4 text-[15px] font-medium leading-relaxed text-ink sm:text-[17px]">
+              “{aiStance}”
+            </blockquote>
+          </figure>
         </div>
       </Reveal>
     </Section>

@@ -458,6 +458,9 @@ export const projects = [
   },
 ]
 
+// How I work with AI, shown under the Tools grid.
+export const aiStance = "You're the dev, AI is the senior who reviews your code and explains things."
+
 export const toolbelt = [
   { name: 'Python', icon: '/tech/python.svg' },
   { name: 'Django', icon: '/tech/django.svg' },
