@@ -93,7 +93,8 @@ async function leetcode() {
 }
 
 // GeeksforGeeks has no official API. This is the endpoint its own profile page
-// uses: solved problems grouped by difficulty. Only the count is kept.
+// uses: solved problems grouped by difficulty, each with the time it was solved.
+// That time becomes the day it counts on in the heatmap.
 async function gfg() {
   const res = await fetch('https://practiceapi.geeksforgeeks.org/api/v1/user/problems/submissions/', {
     method: 'POST',
@@ -104,8 +105,16 @@ async function gfg() {
   if (!res.ok) throw new Error(`GeeksforGeeks responded ${res.status}`)
   const { status, result } = await res.json()
   if (status !== 'success' || !result) throw new Error('GeeksforGeeks returned no problems')
-  const solved = Object.values(result).reduce((sum, group) => sum + Object.keys(group).length, 0)
-  return { user: GFG_USER, url: profile.gfg, solved }
+  const problems = Object.values(result).flatMap((group) => Object.values(group))
+  const perDay = {}
+  for (const { user_subtime } of problems) {
+    const date = user_subtime?.slice(0, 10)
+    if (date) perDay[date] = (perDay[date] ?? 0) + 1
+  }
+  const days = Object.entries(perDay)
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => a.date.localeCompare(b.date))
+  return { user: GFG_USER, url: profile.gfg, solved: problems.length, days }
 }
 
 const sources = { github, leetcode, gfg, jobharvester }
