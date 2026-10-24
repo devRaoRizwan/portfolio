@@ -9,6 +9,7 @@ import { profile } from '../src/content.js'
 const lastSegment = (url) => new URL(url).pathname.split('/').filter(Boolean).pop()
 const GITHUB_USER = lastSegment(profile.github)
 const LEETCODE_USER = lastSegment(profile.leetcode)
+const GFG_USER = lastSegment(profile.gfg)
 const JOBHARVESTER_API = 'https://jobharvester-backend-3bto.onrender.com/api/v1/jobs/?page=1'
 const OUT = resolve('src/activity.json')
 
@@ -91,7 +92,23 @@ async function leetcode() {
   return { user: LEETCODE_USER, url: profile.leetcode, solved, days }
 }
 
-const sources = { github, leetcode, jobharvester }
+// GeeksforGeeks has no official API. This is the endpoint its own profile page
+// uses: solved problems grouped by difficulty. Only the count is kept.
+async function gfg() {
+  const res = await fetch('https://practiceapi.geeksforgeeks.org/api/v1/user/problems/submissions/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0' },
+    body: JSON.stringify({ handle: GFG_USER, requestType: '', year: '', month: '' }),
+    signal: AbortSignal.timeout(15000),
+  })
+  if (!res.ok) throw new Error(`GeeksforGeeks responded ${res.status}`)
+  const { status, result } = await res.json()
+  if (status !== 'success' || !result) throw new Error('GeeksforGeeks returned no problems')
+  const solved = Object.values(result).reduce((sum, group) => sum + Object.keys(group).length, 0)
+  return { user: GFG_USER, url: profile.gfg, solved }
+}
+
+const sources = { github, leetcode, gfg, jobharvester }
 const results = await Promise.allSettled(Object.values(sources).map((fetchOne) => fetchOne()))
 
 const activity = { fetchedAt: new Date().toISOString() }
@@ -108,5 +125,6 @@ writeFileSync(OUT, JSON.stringify(activity) + '\n')
 console.log(
   `[activity] GitHub ${activity.github?.days.length ?? '-'} days, ` +
     `LeetCode ${activity.leetcode?.days.length ?? '-'} active days, ` +
+    `GeeksforGeeks ${activity.gfg?.solved ?? '-'} solved, ` +
     `JobHarvester ${activity.jobharvester?.listings ?? '-'} listings`
 )

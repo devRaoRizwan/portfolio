@@ -146,7 +146,8 @@ function Legend() {
   )
 }
 
-function HeatmapCard({ name, handle, logo, url, icon, days, levelOf, stats }) {
+// `links` replaces the @handle line when a card covers more than one site.
+function HeatmapCard({ name, handle, links, logo, url, icon, days, levelOf, stats, caption }) {
   return (
     <article className="glass flex h-full flex-col rounded-[22px] p-5 sm:p-6">
       <div className="flex items-center justify-between gap-4">
@@ -154,7 +155,20 @@ function HeatmapCard({ name, handle, logo, url, icon, days, levelOf, stats }) {
           <Logo src={logo} name={name} className="h-11 w-11" />
           <div className="min-w-0">
             <h3 className="text-base font-semibold leading-tight text-ink">{name}</h3>
-            <p className="mt-0.5 truncate font-mono text-[12px] text-muted">@{handle}</p>
+            {links ? (
+              <p className="mt-0.5 truncate font-mono text-[12px] text-muted">
+                {links.map((l, i) => (
+                  <span key={l.url}>
+                    {i > 0 && ' · '}
+                    <a href={l.url} target="_blank" rel="me noreferrer noopener" className="underline-offset-4 hover:text-ink hover:underline">
+                      {l.label}
+                    </a>
+                  </span>
+                ))}
+              </p>
+            ) : (
+              <p className="mt-0.5 truncate font-mono text-[12px] text-muted">@{handle}</p>
+            )}
           </div>
         </div>
         <a
@@ -172,7 +186,7 @@ function HeatmapCard({ name, handle, logo, url, icon, days, levelOf, stats }) {
         <Heatmap days={days} levelOf={levelOf} label={`${name} activity over the last year`} />
       </div>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <p className="font-mono text-[12px] text-muted">Calendar figures cover the last 12 months</p>
+        <p className="font-mono text-[12px] text-muted">{caption ?? 'Calendar figures cover the last 12 months'}</p>
         <Legend />
       </div>
     </article>
@@ -180,7 +194,7 @@ function HeatmapCard({ name, handle, logo, url, icon, days, levelOf, stats }) {
 }
 
 export default function Activity() {
-  const { github, leetcode } = activity
+  const { github, leetcode, gfg } = activity
   if (!github && !leetcode) return null
 
   const gh = github && yearStats(github.days)
@@ -211,20 +225,26 @@ export default function Activity() {
         )}
         {leetcode && (
           <Reveal delay={80} className="h-full">
+            {/* LeetCode's calendar, with GeeksforGeeks counted alongside it. */}
             <HeatmapCard
-              name="LeetCode"
+              name="Problem solving"
               handle={leetcode.user}
+              links={[
+                { label: 'LeetCode', url: leetcode.url },
+                ...(gfg ? [{ label: 'GeeksforGeeks', url: gfg.url }] : []),
+              ]}
               logo="/tech/leetcode.svg"
               url={leetcode.url}
               icon={<IconCode width={15} height={15} />}
               days={leetcode.days}
               levelOf={shadeBy(leetcode.days)}
               stats={[
-                ...(solved?.all != null ? [{ label: 'Problems solved', value: solved.all }] : []),
-                { label: 'Submissions', value: lc.total.toLocaleString('en-US') },
+                ...(solved?.all != null ? [{ label: 'Solved on LeetCode', value: solved.all }] : []),
+                ...(gfg?.solved != null ? [{ label: 'Solved on GeeksforGeeks', value: gfg.solved }] : []),
                 { label: 'Active days', value: lc.activeDays },
                 { label: 'Longest streak', value: plural(lc.longest, 'day') },
               ]}
+              caption="Calendar shows LeetCode, last 12 months"
             />
           </Reveal>
         )}

@@ -15,6 +15,7 @@ export const profile = {
   github: 'https://github.com/devRaoRizwan',
   linkedin: 'https://linkedin.com/in/raorixwan',
   leetcode: 'https://leetcode.com/u/devraorizwan/',
+  gfg: 'https://www.geeksforgeeks.org/profile/devraorizwan',
 
   openTo: 'Open to backend roles',
   location: 'Lahore, Pakistan',

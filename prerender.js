@@ -23,13 +23,25 @@ function withMeta(html, path, meta) {
     .replace(/(property="og:description"\s+content=")[^"]*/, `$1${description}`)
     .replace(/(name="twitter:title" content=")[^"]*/, `$1${title}`)
     .replace(/(name="twitter:description"\s+content=")[^"]*/, `$1${description}`)
+    .replace(/(property="og:image" content=")[^"]*/, (m, a) => (meta.image ? a + meta.image.url : m))
+    .replace(/(property="og:image:alt" content=")[^"]*/, (m, a) => (meta.image ? a + attr(meta.image.alt) : m))
+    .replace(/(property="og:image:width" content=")[^"]*/, (m, a) => (meta.image ? a + meta.image.width : m))
+    .replace(/(property="og:image:height" content=")[^"]*/, (m, a) => (meta.image ? a + meta.image.height : m))
+    .replace(/(name="twitter:image" content=")[^"]*/, (m, a) => (meta.image ? a + meta.image.url : m))
+    .replace(/(name="twitter:image:alt" content=")[^"]*/, (m, a) => (meta.image ? a + attr(meta.image.alt) : m))
 }
 
-for (const { path, meta } of routes) {
+// JSON-LD is script content, so only a closing tag could break out of it.
+const jsonLd = (data) =>
+  `    <script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>\n  </head>`
+
+for (const { path, meta, schema } of routes) {
   const html = render(path)
   const dir = resolve(dist, `.${path}`)
   mkdirSync(dir, { recursive: true })
-  writeFileSync(resolve(dir, 'index.html'), withMeta(template, path, meta).replace('<div id="root"></div>', `<div id="root">${html}</div>`))
+  let page = withMeta(template, path, meta).replace('<div id="root"></div>', `<div id="root">${html}</div>`)
+  if (schema) page = page.replace('</head>', jsonLd(schema))
+  writeFileSync(resolve(dir, 'index.html'), page)
   console.log(`prerendered ${(Buffer.byteLength(html, 'utf-8') / 1024).toFixed(1)} KB of HTML for ${path}`)
 }
 
