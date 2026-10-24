@@ -21,6 +21,8 @@ export const profile = {
   availability: 'Remote, or on site in Lahore',
 
   photo: '/images/rao-rizwan-320.webp',
+  // The full-size photo too, so the page itself shows Google Images a sharp copy.
+  photoSrcSet: '/images/rao-rizwan-320.webp 320w, /images/rao-rizwan.webp 800w',
   photoFallback: '/images/rao-rizwan-320.jpg',
   photoAlt: 'Rao Rizwan, Python backend engineer in Lahore, Pakistan',
 }

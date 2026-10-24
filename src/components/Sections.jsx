@@ -110,7 +110,7 @@ export function Hero() {
               <div className="min-w-0">
                 <div className="flex items-center gap-4">
                   <picture className="lg:hidden">
-                    <source srcSet={profile.photo} type="image/webp" />
+                    <source srcSet={profile.photoSrcSet} sizes="(min-width: 640px) 96px, 64px" type="image/webp" />
                     <img
                       src={profile.photoFallback}
                       alt={profile.photoAlt}
@@ -184,7 +184,7 @@ export function Hero() {
               </div>
 
               <picture className="hidden lg:block">
-                <source srcSet={profile.photo} type="image/webp" />
+                <source srcSet={profile.photoSrcSet} sizes="160px" type="image/webp" />
                 <img
                   src={profile.photoFallback}
                   alt={profile.photoAlt}

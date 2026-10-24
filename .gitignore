@@ -11,5 +11,6 @@ dist-ssr
 
 # Private source material and local-only files
 private/
+problems/
 
 # Source images kept locally; the processed versions in public/ are committed
