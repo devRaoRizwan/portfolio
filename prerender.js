@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs'
+import { execSync } from 'node:child_process'
 import { resolve } from 'node:path'
 
 const SITE = 'https://devraorizwan.online'
@@ -70,13 +71,19 @@ writeFileSync(
 console.log('prerendered 404.html')
 rmSync(resolve('dist-ssr'), { recursive: true, force: true })
 
-// The sitemap is built from the same route list, stamped with this build's date.
-const today = new Date().toISOString().slice(0, 10)
+// The sitemap is built from the same route list. lastmod is the date of the
+// last commit, not the build: the daily activity redeploy changes no content,
+// and a date that is always "today" teaches Google to ignore it. Without git
+// (a plain folder build) the field is left out.
+let lastmod = null
+try {
+  lastmod = execSync('git log -1 --format=%cs', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim() || null
+} catch {}
 const entries = routes.map(({ path, images = [] }) =>
   [
     '  <url>',
     `    <loc>${SITE}${path}</loc>`,
-    `    <lastmod>${today}</lastmod>`,
+    ...(lastmod ? [`    <lastmod>${lastmod}</lastmod>`] : []),
     '    <changefreq>monthly</changefreq>',
     `    <priority>${path === '/' ? '1.0' : '0.8'}</priority>`,
     ...images.map((src) => `    <image:image><image:loc>${SITE}${src}</image:loc></image:image>`),

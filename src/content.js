@@ -98,6 +98,11 @@ export const projects = [
   {
     name: 'BOMWatcher',
     slug: 'bomwatcher',
+    // Search result title and snippet, kept under Google's cut-off (~60 and ~155 characters).
+    seo: {
+      title: 'BOMWatcher: AI Bill of Materials for GitHub | Rao Rizwan',
+      description: 'An AI bill of materials for GitHub repos. Scans run on your own GitHub Actions and report the libraries and AI models your code uses. Built by Rao Rizwan.',
+    },
     logo: '/logos/projects/bomwatcher.svg',
     tagline: 'An AI bill of materials for your GitHub repos',
     cover: {
@@ -207,6 +212,11 @@ export const projects = [
   {
     name: 'SiteScopia',
     slug: 'sitescopia',
+    // Search result title and snippet, kept under Google's cut-off (~60 and ~155 characters).
+    seo: {
+      title: 'SiteScopia: Evidence-led Website Analysis | Rao Rizwan',
+      description: 'Analyze a public URL across SEO, accessibility, security, performance and domain signals, with evidence and a fix for every finding. Built by Rao Rizwan.',
+    },
     logo: '/logos/projects/sitescopia.svg',
     tagline: 'Evidence-led website analysis',
     cover: {
@@ -300,6 +310,11 @@ export const projects = [
   {
     name: 'JobHarvester',
     slug: 'jobharvester',
+    // Search result title and snippet, kept under Google's cut-off (~60 and ~155 characters).
+    seo: {
+      title: 'JobHarvester: Pakistan Tech Job Aggregator | Rao Rizwan',
+      description: 'Scheduled crawlers collect tech jobs from Lahore company career pages into one searchable feed. Django REST API, PostgreSQL and React. Built by Rao Rizwan.',
+    },
     logo: '/logos/projects/jobharvester.webp',
     tagline: 'Job aggregation for the Pakistani tech market',
     cover: {
@@ -402,6 +417,11 @@ export const projects = [
   {
     name: 'Jobbr',
     slug: 'jobbr',
+    // Search result title and snippet, kept under Google's cut-off (~60 and ~155 characters).
+    seo: {
+      title: 'Jobbr: Job Board REST API with JWT and RBAC | Rao Rizwan',
+      description: 'A Django REST Framework job board API where employers and job seekers get different permissions through JWT and role-based access. Built by Rao Rizwan.',
+    },
     logo: '/logos/projects/jobbr.svg',
     tagline: 'A job board API with two very different users',
     cover: {

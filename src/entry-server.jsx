@@ -53,8 +53,8 @@ export const routes = [
   ...projects.map((p) => ({
     path: projectPath(p),
     meta: {
-      title: `${p.name}: ${p.tagline} | Rao Rizwan`,
-      description: oneLine(describe(p)),
+      title: p.seo?.title ?? `${p.name}: ${p.tagline} | Rao Rizwan`,
+      description: p.seo?.description ?? oneLine(describe(p)),
       // Link previews show the project's own cover instead of the site-wide og.png.
       // JPG at 1200x630, the shape and format every link-preview service handles.
       image: { url: `${SITE}/images/og/${p.slug}.jpg`, alt: p.cover.alt, width: 1200, height: 630 },
